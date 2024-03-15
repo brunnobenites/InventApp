@@ -2,12 +2,13 @@ const Sequelize = require("sequelize");
 const database = require("../db");
 
 const arvoresModel = database.define("arvores", {
-  id: {
+  id_arvore: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
   },
+  id_inventario: Sequelize.INTEGER,
   n_tag: Sequelize.INTEGER,
   especie: Sequelize.STRING,
   altura: Sequelize.FLOAT,
@@ -32,6 +33,7 @@ const arvoresModel = database.define("arvores", {
   legfoto2: Sequelize.STRING,
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
+  //Chave estrangeira para o inventário
 });
 
 module.exports = arvoresModel;

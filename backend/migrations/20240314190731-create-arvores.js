@@ -2,16 +2,16 @@
 
 const { DataTypes } = require("sequelize");
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.createTable("arvores", {
-      id: {
+      id_arvore: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
       },
+      id_inventario: DataTypes.INTEGER,
       n_tag: DataTypes.INTEGER,
       especie: DataTypes.STRING,
       altura: DataTypes.FLOAT,

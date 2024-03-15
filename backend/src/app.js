@@ -6,6 +6,7 @@ const errorMiddleware = require("./middlewares/errorMiddleware");
 require("express-async-errors");
 const cors = require("cors");
 const helmet = require("helmet");
+const inventariosController = require("./controllers/inventariosController");
 
 const app = express();
 
@@ -30,6 +31,10 @@ app.post("/login", authController.doLogin);
 //200 status ok e 401 não autorizado
 
 app.get("/settings", authMiddleware, settingsController.getSettings);
+
+app.patch("/settings", authMiddleware, settingsController.updateSettings);
+
+app.get("/inventarios", authMiddleware, inventariosController.getInventarios);
 
 app.post("/logout", authController.doLogout);
 

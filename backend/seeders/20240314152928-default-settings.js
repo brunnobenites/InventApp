@@ -8,7 +8,7 @@ module.exports = {
         email: "brunnobenites@gmail.com",
         password: bcrypt.hashSync("badweiser05"),
         departament: "SISEP",
-        createdAp: new Date(),
+        createdAt: new Date(),
         updatedAt: new Date(),
       },
     ]);

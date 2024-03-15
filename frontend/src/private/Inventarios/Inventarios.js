@@ -1,0 +1,165 @@
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import Menu from "../../components/Menu/Menu";
+import { getInventarios } from "../../services/InventariosService";
+
+function Inventarios() {
+  const history = useHistory();
+  const [inventarios, setInventarios] = useState([]);
+
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    getInventarios(token)
+      .then((data) => {
+        setInventarios(data);
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 401)
+          return history.push("/");
+        if (err.response) setError(err.response.data);
+        else setError(err.message);
+      });
+  }, []);
+
+  return (
+    <React.Fragment>
+      <Menu />
+      <main className="content">
+        <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+          <div className="d-block mb-4 mb-md-0">
+            <h1 className="h4">Inventários</h1>
+          </div>
+        </div>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <a
+            href="#"
+            class="btn btn-sm btn-gray-800 d-inline-flex align-items-center"
+          >
+            <svg
+              class="icon icon-xs me-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              ></path>
+            </svg>
+            Novo Inventário
+          </a>
+          <div class="input-group ms-auto fmxw-200 ">
+            <span class="input-group-text">
+              <svg
+                class="icon icon-xs"
+                x-description="Heroicon name: solid/search"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Pesquisar"
+            ></input>
+          </div>
+        </div>
+        <div>
+          <div style={{ height: "10px" }}></div>
+        </div>
+        <div class="card card-body border-0 shadow table-wrapper table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th class="border-gray-200">Id</th>
+                <th class="border-gray-200">Nome</th>
+                <th class="border-gray-200">Data de Criação</th>
+                <th class="border-gray-200">Data de Finalização</th>
+                <th class="border-gray-200">Status</th>
+                <th class="border-gray-200">Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              {inventarios && inventarios.length ? (
+                inventarios.map((inventario) => (
+                  <tr key={inventario.id}>
+                    <td>{inventario.id}</td>
+                    <td>{inventario.name}</td>
+                    <td>Data</td>
+                    <td>Data</td>
+                    <td>Status</td>
+                    <td>Ações</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6">Nenhum inventário encontrado.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+          <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination mb-0">
+                <li class="page-item">
+                  <a class="page-link" href="#">
+                    Anterior
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="#">
+                    1
+                  </a>
+                </li>
+                <li class="page-item active">
+                  <a class="page-link" href="#">
+                    2
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="#">
+                    3
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="#">
+                    4
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="#">
+                    5
+                  </a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="#">
+                    Próxima
+                  </a>
+                </li>
+              </ul>
+            </nav>
+            <div class="fw-normal small mt-4 mt-lg-0">
+              Visualizando <b>5</b> de <b>25</b> entradas
+            </div>
+          </div>
+        </div>
+      </main>
+    </React.Fragment>
+  );
+}
+
+export default Inventarios;

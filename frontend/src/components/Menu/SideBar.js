@@ -61,7 +61,7 @@ function SideBar() {
         <ul className="nav flex-column pt-3 pt-md-0">
           <li className="nav-item">
             <Link
-              to="/settings"
+              to="/inventarios"
               className="nav-link d-flex align-items-center"
             >
               <span className="sidebar-icon">
@@ -75,8 +75,8 @@ function SideBar() {
               <span className="mt-1 ms-1 sidebar-text">InventApp Menu</span>
             </Link>
           </li>
-          <li className={getClassName("/inventario")}>
-            <Link to="/inventario" className="nav-link">
+          <li className={getClassName("/inventarios")}>
+            <Link to="/inventarios" className="nav-link">
               <span className="sidebar-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -93,11 +93,11 @@ function SideBar() {
                   />
                 </svg>
               </span>
-              <span className="mt-1 ms-1 sidebar-text">Inventarios</span>
+              <span className="mt-1 ms-1 sidebar-text">Inventários</span>
             </Link>
           </li>
-          <li className={getClassName("/inventario")}>
-            <Link to="/inventario" className="nav-link">
+          <li className={getClassName("/cadastro_arvores")}>
+            <Link to="/cadastro_arvores" className="nav-link">
               <span className="sidebar-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -119,8 +119,29 @@ function SideBar() {
               </span>
             </Link>
           </li>
-          <li className={getClassName("/inventario")}>
-            <Link to="/inventario" className="nav-link">
+          <li className={getClassName("/material")}>
+            <Link to="/material" className="nav-link">
+              <span className="sidebar-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="icon icon-sm"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
+                  />
+                </svg>
+              </span>
+              <span className="mt-1 ms-1 sidebar-text">Material de Apoio</span>
+            </Link>
+          </li>
+          <li className={getClassName("/settings")}>
+            <Link to="/settings" className="nav-link">
               <span className="sidebar-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -142,28 +163,7 @@ function SideBar() {
                   />
                 </svg>
               </span>
-              <span className="mt-1 ms-1 sidebar-text">Settings</span>
-            </Link>
-          </li>
-          <li className={getClassName("/inventario")}>
-            <Link to="/inventario" className="nav-link">
-              <span className="sidebar-icon">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="icon icon-sm"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m18.375 12.739-7.693 7.693a4.5 4.5 0 0 1-6.364-6.364l10.94-10.94A3 3 0 1 1 19.5 7.372L8.552 18.32m.009-.01-.01.01m5.699-9.941-7.81 7.81a1.5 1.5 0 0 0 2.112 2.13"
-                  />
-                </svg>
-              </span>
-              <span className="mt-1 ms-1 sidebar-text">Material de Apoio</span>
+              <span className="mt-1 ms-1 sidebar-text">Configurações</span>
             </Link>
           </li>
           <li
