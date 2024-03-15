@@ -4,7 +4,7 @@ import { doLogout } from "../../services/AuthService";
 import SideBarItem from "./SideBarItem";
 
 function SideBar() {
-  const history = userHistory();
+  const history = useHistory();
 
   function getClassName(itemName) {
     return window.location.pathname === itemName

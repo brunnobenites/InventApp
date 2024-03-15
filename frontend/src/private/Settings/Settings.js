@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { getSettings } from "../../services/SettingsService";
 import { doLogout } from "../../services/AuthService";
+import Menu from "../../components/Menu/Menu"
 
 function Settings() {
   const history = useHistory();
@@ -43,7 +44,9 @@ function Settings() {
   }
 
   return (
-    <main>
+    <React.Fragment>
+       <Menu />
+<main>
       <section className="vh-lg-100 mt-5 mt-lg-0 bg-soft d-flex align-items-center">
         <div className="container">
           <p className="text-center">
@@ -81,6 +84,8 @@ function Settings() {
         </div>
       </section>
     </main>
+    </React.Fragment>
+    
   );
 }
 
