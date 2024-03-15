@@ -61,7 +61,7 @@ function SideBar() {
         <ul className="nav flex-column pt-3 pt-md-0">
           <li className="nav-item">
             <Link
-              to="/inventario"
+              to="/settings"
               className="nav-link d-flex align-items-center"
             >
               <span className="sidebar-icon">
