@@ -1,28 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Menu from "../../components/Menu/Menu";
-import { getInventarios } from "../../services/InventariosService";
+import { getAllInventarios } from "../../services/InventariosService";
 
 function Inventarios() {
   const history = useHistory();
   const [inventarios, setInventarios] = useState([]);
-
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    getInventarios(token)
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllInventarios();
         setInventarios(data);
-      })
-      .catch((err) => {
-        if (err.response && err.response.status === 401)
-          return history.push("/");
-        if (err.response) setError(err.response.data);
-        else setError(err.message);
-      });
-  }, []);
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          history.push("/");
+        } else if (error.response) {
+          setError(error.response.data);
+        } else {
+          setError(error.message);
+        }
+      }
+    };
+
+    fetchData();
+  }, [history]);
 
   return (
     <React.Fragment>
@@ -96,11 +99,11 @@ function Inventarios() {
             <tbody>
               {inventarios && inventarios.length ? (
                 inventarios.map((inventario) => (
-                  <tr key={inventario.id}>
-                    <td>{inventario.id}</td>
+                  <tr key={inventario.id_inventario}>
+                    <td>{inventario.id_inventario}</td>
                     <td>{inventario.name}</td>
-                    <td>Data</td>
-                    <td>Data</td>
+                    <td>{inventario.createdAt}</td>
+                    <td>{inventario.updatedAt}</td>
                     <td>Status</td>
                     <td>Ações</td>
                   </tr>

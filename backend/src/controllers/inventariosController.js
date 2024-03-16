@@ -29,5 +29,28 @@ async function getAllInventarios(req, res, next) {
   }
 }
 
-module.exports = { getInventarios, getAllInventarios };
+async function insertInventario(req, res, next) {
+  try {
+    const newInventario = req.body; // Supondo que o corpo da requisição contém os dados do novo inventário
+    const inventario = await inventariosRepository.insertInventario(newInventario);
+    res.status(201).json(inventario); // Retornar o inventário criado com o status 201 (Created)
+  } catch (error) {
+    console.error("Erro ao inserir inventário:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
+  }
+}
+
+async function deleteInventario(req, res, next) {
+  try {
+    const id_inventario = req.params.id_inventario;
+    await inventariosRepository.deleteInventario(id_inventario);
+    res.json({ message: "Inventário excluído com sucesso." });
+  } catch (error) {
+    console.error("Erro ao excluir inventário:", error);
+    res.status(500).json({ error: "Erro ao excluir inventário." });
+  }
+}
+
+
+module.exports = { getInventarios, getAllInventarios, insertInventario, deleteInventario };
 

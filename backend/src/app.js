@@ -38,6 +38,10 @@ app.get("/inventarios/", inventariosController.getAllInventarios);
 
 app.get("/inventarios/:id_inventario", inventariosController.getInventarios);
 
+app.post("/inventarios", inventariosController.insertInventario);
+
+app.delete("/inventarios/:id_inventario", inventariosController.deleteInventario);
+
 app.post("/logout", authController.doLogout);
 
 app.use("/", (req, res, next) => {
