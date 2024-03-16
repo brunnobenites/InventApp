@@ -34,7 +34,9 @@ app.get("/settings", authMiddleware, settingsController.getSettings);
 
 app.patch("/settings", authMiddleware, settingsController.updateSettings);
 
-app.get("/inventarios", authMiddleware, inventariosController.getInventarios);
+app.get("/inventarios/", inventariosController.getAllInventarios);
+
+app.get("/inventarios/:id_inventario", inventariosController.getInventarios);
 
 app.post("/logout", authController.doLogout);
 
