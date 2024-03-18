@@ -96,8 +96,8 @@ function SideBar() {
               <span className="mt-1 ms-1 sidebar-text">Inventários</span>
             </Link>
           </li>
-          <li className={getClassName("/cadastro_arvores")}>
-            <Link to="/cadastro_arvores" className="nav-link">
+          <li className={getClassName("/arvores")}>
+            <Link to="/arvores" className="nav-link">
               <span className="sidebar-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -114,9 +114,7 @@ function SideBar() {
                   />
                 </svg>
               </span>
-              <span className="mt-1 ms-1 sidebar-text">
-                Cadastro de Árvores
-              </span>
+              <span className="mt-1 ms-1 sidebar-text">Árvores</span>
             </Link>
           </li>
           <li className={getClassName("/material")}>

@@ -3,9 +3,12 @@ import { Route, BrowserRouter, Redirect } from "react-router-dom";
 import Login from "./public/Login/Login";
 import Settings from "./private/Settings/Settings";
 import Inventarios from "./private/Inventarios/Inventarios";
+import NewInventario from "./private/Inventarios/NewInventario";
+import Arvores from "./private/Arvores/Arvores";
 
 function Routes() {
   function PrivateRoute({ children, ...rest }) {
+    console.log("Props em PrivateRoute:", rest); // Adicione este console.log
     return (
       <Route
         {...rest}
@@ -26,6 +29,12 @@ function Routes() {
       </PrivateRoute>
       <PrivateRoute path="/inventarios">
         <Inventarios />
+      </PrivateRoute>
+      <PrivateRoute path="/inventarios/:id_inventario">
+        <NewInventario />
+      </PrivateRoute>
+      <PrivateRoute path="/arvores">
+        <Arvores />
       </PrivateRoute>
     </BrowserRouter>
   );

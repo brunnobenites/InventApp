@@ -1,33 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 import Menu from "../../components/Menu/Menu";
-import { getAllInventarios } from "../../services/InventariosService";
-import NewInventarioButton from "../Inventarios/NewInventarioButton";
-import NewInventarioModal from "./NewInventarioModal";
+//import { getAllInventarios } from "../../services/InventariosService";
+import NewArvoreButton from "./NewArvoreButton";
+import NewArvoreModal from "./NewArvoreModal";
 
-function Inventarios() {
-  const history = useHistory();
-  const [inventarios, setInventarios] = useState([]);
-  const [error, setError] = useState("");
+function Arvores() {
+  // const history = useHistory();
+  // const [inventarios, setInventarios] = useState([]);
+  // const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getAllInventarios();
-        setInventarios(data);
-      } catch (error) {
-        if (error.response && error.response.status === 401) {
-          history.push("/");
-        } else if (error.response) {
-          setError(error.response.data);
-        } else {
-          setError(error.message);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const data = await getAllInventarios();
+  //       setInventarios(data);
+  //     } catch (error) {
+  //       if (error.response && error.response.status === 401) {
+  //         history.push("/");
+  //       } else if (error.response) {
+  //         setError(error.response.data);
+  //       } else {
+  //         setError(error.message);
+  //       }
+  //     }
+  //   };
 
-    fetchData();
-  }, [history]);
+  //   fetchData();
+  // }, [history]);
 
   return (
     <React.Fragment>
@@ -35,11 +35,11 @@ function Inventarios() {
       <main className="content">
         <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
           <div className="d-block mb-4 mb-md-0">
-            <h1 className="h4">Inventários</h1>
+            <h1 className="h4">Árvores</h1>
           </div>
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
-          <NewInventarioButton />
+          <NewArvoreButton />
           <div class="input-group ms-auto fmxw-200 ">
             <span class="input-group-text">
               <svg
@@ -72,15 +72,15 @@ function Inventarios() {
             <thead>
               <tr>
                 <th class="border-gray-200">Id</th>
-                <th class="border-gray-200">Nome</th>
-                <th class="border-gray-200">Data de Criação</th>
-                <th class="border-gray-200">Data de Finalização</th>
-                <th class="border-gray-200">Status</th>
+                <th class="border-gray-200">Inventário</th>
+                <th class="border-gray-200">Tag</th>
+                <th class="border-gray-200">Espécie</th>
+                <th class="border-gray-200">Endereço</th>
                 <th class="border-gray-200">Ação</th>
               </tr>
             </thead>
             <tbody>
-              {inventarios && inventarios.length ? (
+              {/* {inventarios && inventarios.length ? (
                 inventarios.map((inventario) => (
                   <tr key={inventario.id_inventario}>
                     <td>{inventario.id_inventario}</td>
@@ -95,7 +95,7 @@ function Inventarios() {
                 <tr>
                   <td colSpan="6">Nenhum inventário encontrado.</td>
                 </tr>
-              )}
+              )} */}
             </tbody>
           </table>
           <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
@@ -144,9 +144,9 @@ function Inventarios() {
           </div>
         </div>
       </main>
-      <NewInventarioModal />
+      <NewArvoreModal />
     </React.Fragment>
   );
 }
 
-export default Inventarios;
+export default Arvores;
