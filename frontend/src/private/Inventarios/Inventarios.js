@@ -29,6 +29,14 @@ function Inventarios() {
     fetchData();
   }, [history]);
 
+  const formatarData = (data) => {
+    const dataObj = new Date(data);
+    const dia = dataObj.getDate().toString().padStart(2, "0");
+    const mes = (dataObj.getMonth() + 1).toString().padStart(2, "0");
+    const ano = dataObj.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  };
+
   return (
     <React.Fragment>
       <Menu />
@@ -73,9 +81,7 @@ function Inventarios() {
               <tr>
                 <th class="border-gray-200">Id</th>
                 <th class="border-gray-200">Nome</th>
-                <th class="border-gray-200">Data de Criação</th>
-                <th class="border-gray-200">Data de Finalização</th>
-                <th class="border-gray-200">Status</th>
+                <th class="border-gray-200">Data</th>
                 <th class="border-gray-200">Ação</th>
               </tr>
             </thead>
@@ -85,9 +91,7 @@ function Inventarios() {
                   <tr key={inventario.id_inventario}>
                     <td>{inventario.id_inventario}</td>
                     <td>{inventario.name}</td>
-                    <td>{inventario.createdAt}</td>
-                    <td>{inventario.updatedAt}</td>
-                    <td>Status</td>
+                    <td>{formatarData(inventario.createdAt)}</td>
                     <td>Ações</td>
                   </tr>
                 ))

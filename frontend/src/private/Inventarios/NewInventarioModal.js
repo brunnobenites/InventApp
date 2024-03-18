@@ -1,16 +1,30 @@
 import React, { useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { insertInventario } from "../../services/InventariosService";
 
 function NewInventarioModal() {
+  const history = useHistory();
   const btnClose = useRef("");
-
+  const [newInventario, setNewInventario] = useState("");
   const [error, setError] = useState("");
 
-  function onFormSubmit(event) {
-    console.log("click");
+  async function onFormSubmit(event) {
+    event.preventDefault();
+    try {
+      const inventario = { name: newInventario };
+      const response = await insertInventario(inventario);
+      console.log("Resposta do servidor: ", response);
+      // Fechar a modal
+      btnClose.current.click();
+      // Redirecionar para a página /inventarios
+      history.push("/inventarios");
+    } catch (error) {
+      setError(error.message);
+    }
   }
 
   function onInputChange(event) {
-    console.log("click");
+    setNewInventario(event.target.value);
   }
 
   return (
@@ -42,7 +56,7 @@ function NewInventarioModal() {
                   id="nome"
                   type="nome"
                   placeholder="Nome do Inventário"
-                  //value={inventario.name || ""}
+                  value={newInventario}
                   onChange={onInputChange}
                 />
               </div>
