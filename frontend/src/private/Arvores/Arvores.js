@@ -1,33 +1,37 @@
 import React, { useEffect, useState } from "react";
-//import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Menu from "../../components/Menu/Menu";
-//import { getAllInventarios } from "../../services/InventariosService";
+import { getAllArvores } from "../../services/ArvoresService";
+import { getAllInventarios } from "../../services/InventariosService";
 import NewArvoreButton from "./NewArvoreButton";
 import NewArvoreModal from "./NewArvoreModal";
 
 function Arvores() {
-  // const history = useHistory();
-  // const [inventarios, setInventarios] = useState([]);
-  // const [error, setError] = useState("");
+  const history = useHistory();
+  const [arvores, setArvores] = useState([]);
+  const [inventarios, setInventarios] = useState([]); // Adicione um estado para os inventários
+  const [error, setError] = useState("");
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await getAllInventarios();
-  //       setInventarios(data);
-  //     } catch (error) {
-  //       if (error.response && error.response.status === 401) {
-  //         history.push("/");
-  //       } else if (error.response) {
-  //         setError(error.response.data);
-  //       } else {
-  //         setError(error.message);
-  //       }
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dataArvores = await getAllArvores();
+        const dataInventarios = await getAllInventarios(); // Busque os inventários aqui
+        setArvores(dataArvores);
+        setInventarios(dataInventarios); // Defina o estado dos inventários aqui
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          history.push("/");
+        } else if (error.response) {
+          setError(error.response.data);
+        } else {
+          setError(error.message);
+        }
+      }
+    };
 
-  //   fetchData();
-  // }, [history]);
+    fetchData();
+  }, [history]);
 
   return (
     <React.Fragment>
@@ -72,30 +76,43 @@ function Arvores() {
             <thead>
               <tr>
                 <th class="border-gray-200">Id</th>
-                <th class="border-gray-200">Inventário</th>
+                <th class="border-gray-200">ID - Inventário</th>
                 <th class="border-gray-200">Tag</th>
                 <th class="border-gray-200">Espécie</th>
                 <th class="border-gray-200">Endereço</th>
-                <th class="border-gray-200">Ação</th>
+                <th class="border-gray-200">Status</th>
+                <th class="border-gray-200">Ações</th>
               </tr>
             </thead>
             <tbody>
-              {/* {inventarios && inventarios.length ? (
-                inventarios.map((inventario) => (
-                  <tr key={inventario.id_inventario}>
-                    <td>{inventario.id_inventario}</td>
-                    <td>{inventario.name}</td>
-                    <td>{inventario.createdAt}</td>
-                    <td>{inventario.updatedAt}</td>
-                    <td>Status</td>
-                    <td>Ações</td>
-                  </tr>
-                ))
+              {arvores && arvores.length ? (
+                arvores.map((arvore) => {
+                  const inventario = inventarios.find(
+                    (inventario) =>
+                      inventario.id_inventario === arvore.id_inventario
+                  );
+                  return (
+                    <tr key={arvore.id_arvore}>
+                      <td>{arvore.id_arvore}</td>
+                      <td>
+                        {arvore.id_inventario} -{" "}
+                        {inventario
+                          ? inventario.name
+                          : "Inventário não encontrado"}
+                      </td>
+                      <td>{arvore.n_tag}</td>
+                      <td>{arvore.especie}</td>
+                      <td>{arvore.endereco}</td>
+                      <td>Status</td>
+                      <td>Ações</td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
-                  <td colSpan="6">Nenhum inventário encontrado.</td>
+                  <td colSpan="6">Nenhuma árvore encontrada.</td>
                 </tr>
-              )} */}
+              )}
             </tbody>
           </table>
           <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">

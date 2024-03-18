@@ -7,6 +7,7 @@ require("express-async-errors");
 const cors = require("cors");
 const helmet = require("helmet");
 const inventariosController = require("./controllers/inventariosController");
+const arvoresController = require("./controllers/arvoresController");
 
 const app = express();
 
@@ -40,7 +41,18 @@ app.get("/inventarios/:id_inventario", inventariosController.getInventarios);
 
 app.post("/inventarios", inventariosController.insertInventario);
 
-app.delete("/inventarios/:id_inventario", inventariosController.deleteInventario);
+app.delete(
+  "/inventarios/:id_inventario",
+  inventariosController.deleteInventario
+);
+
+app.get("/arvores/", arvoresController.getAllArvores);
+
+app.get("/arvores/:id_arvore", arvoresController.getArvore);
+
+app.post("/arvores", arvoresController.insertArvore);
+
+app.delete("/arvores/:id_arvore", arvoresController.deleteArvore);
 
 app.post("/logout", authController.doLogout);
 
