@@ -3,8 +3,8 @@ import { Route, BrowserRouter, Redirect } from "react-router-dom";
 import Login from "./public/Login/Login";
 import Settings from "./private/Settings/Settings";
 import Inventarios from "./private/Inventarios/Inventarios";
-import NewInventario from "./private/Inventarios/NewInventario";
 import Arvores from "./private/Arvores/Arvores";
+import SelectInventario from "./private/Inventarios/SelectInventario";
 
 function Routes() {
   function PrivateRoute({ children, ...rest }) {
@@ -31,7 +31,7 @@ function Routes() {
         <Inventarios />
       </PrivateRoute>
       <PrivateRoute path="/inventarios/:id_inventario">
-        <NewInventario />
+        <SelectInventario />
       </PrivateRoute>
       <PrivateRoute path="/arvores">
         <Arvores />

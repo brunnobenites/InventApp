@@ -1,20 +1,17 @@
 import React, { useRef, useState } from "react";
+import SelectInventario from "../Inventarios/SelectInventario";
 
 function NewArvoreModal() {
-  const btnClose = useRef("");
+  const btnClose = useRef(null);
 
   const [error, setError] = useState("");
-
-  const inputIdInventario = useRef("");
-
-  const inputName = useRef("");
 
   function onFormSubmit(event) {
     console.log("click");
   }
 
   function onInputChange(event) {
-    console.log("click");
+    console.log(event);
   }
 
   return (
@@ -42,30 +39,9 @@ function NewArvoreModal() {
             <div className="form-group">
               <div className="col-md-12">
                 <div className="row">
-                  <div className="col-md-6 mb-2">
-                    <label htmlFor="id_inventario">ID Inventário:</label>
-                    <input
-                      ref={inputIdInventario}
-                      className="form-control"
-                      id="id_inventario"
-                      type="id_inventario"
-                      placeholder=""
-                    />
-                  </div>
+                  <SelectInventario onChange={onInputChange} />
                 </div>
 
-                <div className="row">
-                  <div className="col-md-12 mb-2">
-                    <label htmlFor="name">Nome Inventário:</label>
-                    <input
-                      ref={inputName}
-                      className="form-control"
-                      id="name"
-                      type="name"
-                      placeholder=""
-                    />
-                  </div>
-                </div>
                 <li
                   role="separator"
                   className="dropdown-divider mt-2 mb-2 col-12 p-0"

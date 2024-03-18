@@ -3,7 +3,10 @@ import axios from "axios";
 const INVENTARIOS_URL = `${process.env.REACT_APP_API_URL}/inventarios`;
 
 export async function getInventarios(id_inventario) {
-  const inventarioUrl = `${INVENTARIOS_URL}/${id_inventario}`;
+  let inventarioUrl = INVENTARIOS_URL;
+  if (id_inventario !== undefined) {
+    inventarioUrl += `/${id_inventario}`;
+  }
   const response = await axios.get(inventarioUrl);
   return response.data;
 }
