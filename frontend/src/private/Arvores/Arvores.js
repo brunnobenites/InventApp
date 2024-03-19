@@ -5,7 +5,6 @@ import { getAllArvores, deleteArvore } from "../../services/ArvoresService";
 import { getAllInventarios } from "../../services/InventariosService";
 import NewArvoreButton from "./NewArvoreButton";
 import NewArvoreModal from "./NewArvoreModal";
-import ArvoreRow from "./ArvoreRow";
 
 /**
  * props:

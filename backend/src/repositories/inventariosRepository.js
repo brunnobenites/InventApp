@@ -23,15 +23,30 @@ async function deleteInventario(id_inventario) {
     if (!inventario) {
       throw new Error("Inventário não encontrado.");
     }
-    await inventario.destroy({ where: id_inventario});
+    await inventario.destroy({ where: id_inventario });
     return { message: "Inventário excluído com sucesso." };
   } catch (error) {
     throw new Error("Erro ao excluir inventário do banco de dados.");
   }
 }
 
+async function updateInventario(id_inventario, updatedData) {
+  try {
+    const inventario = await inventariosModel.findByPk(id_inventario);
+    if (!inventario) {
+      throw new Error("Inventário não encontrado.");
+    }
+    await inventario.update(updatedData);
+    return { message: "Inventário atualizado com sucesso." };
+  } catch (error) {
+    throw new Error("Erro ao atualizar inventário no banco de dados.");
+  }
+}
 
-module.exports = { getInventarios, getAllInventarios, insertInventario, deleteInventario };
-
-
-
+module.exports = {
+  getInventarios,
+  getAllInventarios,
+  insertInventario,
+  deleteInventario,
+  updateInventario,
+};

@@ -17,7 +17,6 @@ function NewInventarioModal() {
       // Fechar a modal
       btnClose.current.click();
       // Redirecionar para a página /inventarios
-      history.push("/inventarios");
     } catch (error) {
       setError(error.message);
     }

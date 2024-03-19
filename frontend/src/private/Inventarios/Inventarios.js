@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Menu from "../../components/Menu/Menu";
-import { getAllInventarios } from "../../services/InventariosService";
+import {
+  deleteInventario,
+  getAllInventarios,
+} from "../../services/InventariosService";
 import NewInventarioButton from "../Inventarios/NewInventarioButton";
 import NewInventarioModal from "./NewInventarioModal";
 
@@ -28,6 +31,21 @@ function Inventarios() {
 
     fetchData();
   }, [history]);
+
+  const onDeleteClick = async (id_inventario) => {
+    try {
+      await deleteInventario(id_inventario);
+      console.log("Inventário excluído com sucesso!");
+      // Atualizar a lista de árvores após a exclusão
+      const dataInventarios = await getAllInventarios();
+      setInventarios(dataInventarios);
+    } catch (err) {
+      console.error(
+        "Erro ao excluir inventário:",
+        err.response ? err.response.data : err.message
+      );
+    }
+  };
 
   const formatarData = (data) => {
     const dataObj = new Date(data);
@@ -117,14 +135,15 @@ function Inventarios() {
                         </svg>
                       </button>
                       <button
-                        //id={`delete${id_arvore}`}
+                        id={`delete${inventario.id_inventario}`}
                         type="button"
                         className="btn btn-danger btn-xs ms-2"
                         tittle="Deletar esta Árvore"
-                        //onClick={() => onDeleteClick(id_arvore)}
+                        onClick={() => onDeleteClick(inventario.id_inventario)}
                       >
                         <svg
                           className="icon icon-xs"
+                          a
                           data-slot="icon"
                           fill="none"
                           strokeWidth="1.5"

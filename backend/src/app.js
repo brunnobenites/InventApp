@@ -41,6 +41,11 @@ app.get("/inventarios/:id_inventario", inventariosController.getInventarios);
 
 app.post("/inventarios", inventariosController.insertInventario);
 
+app.patch(
+  "/inventarios/:id_inventario",
+  inventariosController.updateInventario
+);
+
 app.delete(
   "/inventarios/:id_inventario",
   inventariosController.deleteInventario
