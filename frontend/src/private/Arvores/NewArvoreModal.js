@@ -1,20 +1,72 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SelectInventario from "../Inventarios/SelectInventario";
+import { useHistory } from "react-router-dom";
+import {insertArvore} from "../../services/ArvoresService"
 
-function NewArvoreModal() {
+function NewArvoreModal({id_inventario}) {
+  const history = useHistory();
   const btnClose = useRef(null);
-
+  const [newArvore, setNewArvore] = useState({});
   const [error, setError] = useState("");
 
-  function onFormSubmit(event) {
-    console.log("click");
+  useEffect(() => {
+    setNewArvore({
+      n_tag: '',
+      especie: '',
+      altura: '',
+      cap1: '',
+      cap2: '',
+      cap3: '',
+      cap4: '',
+      cap5: '',
+      cap6: '',
+      cap7: '',
+      cap8: '',
+      cap9: '',
+      cap10: '',
+      endereco: '',
+      latitude: '',
+      longitude: '',
+      foto1: '',
+      foto2: '',
+      justificativa: '',
+      legfoto1: '',
+      legfoto2: '',
+      id_inventario: id_inventario,
+    })
+  }, [id_inventario])
+  
+  
+  async function onFormSubmit(event) {
+    event.preventDefault();
+    try {
+      console.log("New Arvore Object:", newArvore); // Imprimir o objeto newArvore antes da requisição
+      const response = await insertArvore({ ...newArvore, id_inventario });
+      console.log("Resposta do servidor:", response);
+      // Verificar se a resposta foi bem-sucedida
+      if (response.status === 201) {
+        // Sucesso: redirecionar o usuário ou exibir uma mensagem de sucesso
+        history.push("/arvores");
+      } else {
+        // Resposta com erro: exibir mensagem de erro ao usuário
+        setError("Erro ao inserir árvore. Por favor, tente novamente.");
+      }
+    } catch (error) {
+      console.log("Erro na requisição:", error); // Imprimir o erro capturado
+      // Erro na requisição: exibir mensagem de erro ao usuário
+      setError("Erro ao enviar requisição. Por favor, tente novamente mais tarde.");
+    }
   }
+  
 
-  function onInputChange(event) {
-    console.log(event);
+   function onInputChange(event) {
+    setNewArvore({
+      ...newArvore,
+      [event.target.id]: event.target.value,
+    });
   }
-
-  return (
+  
+   return (
     <div
       className="modal fade"
       id="modalNewArvore"
@@ -55,8 +107,8 @@ function NewArvoreModal() {
                         id="n_tag"
                         type="text"
                         placeholder=""
-                        //value={arvores.n_tag || ""}
-                        required
+                        value={newArvore.n_tag || ""}
+                        //required
                         onChange={onInputChange}
                       />
                     </div>
@@ -69,8 +121,8 @@ function NewArvoreModal() {
                         id="especie"
                         type="text"
                         placeholder="Espécie da Árvore"
-                        //value={arvores.n_tag || ""}
-                        required
+                        value={newArvore.especie || ""}
+                        //required
                         onChange={onInputChange}
                       />
                     </div>
@@ -85,8 +137,8 @@ function NewArvoreModal() {
                         id="altura"
                         type="text"
                         placeholder=""
-                        //value={arvores.n_tag || ""}
-                        required
+                        value={newArvore.altura || ""}
+                        //required
                         onChange={onInputChange}
                       />
                     </div>
@@ -99,8 +151,8 @@ function NewArvoreModal() {
                         id="cap1"
                         type="text"
                         placeholder=""
-                        //value={arvores.n_tag || ""}
-                        required
+                        value={newArvore.cap1 || ""}
+                        //required
                         onChange={onInputChange}
                       />
                     </div>
@@ -113,8 +165,8 @@ function NewArvoreModal() {
                         id="cap2"
                         type="text"
                         placeholder=""
-                        //value={arvores.n_tag || ""}
-                        required
+                        value={newArvore.cap2 || ""}
+                        //required
                         onChange={onInputChange}
                       />
                     </div>
@@ -127,8 +179,8 @@ function NewArvoreModal() {
                         id="cap3"
                         type="text"
                         placeholder=""
-                        //value={arvores.n_tag || ""}
-                        required
+                        value={newArvore.cap3 || ""}
+                        //required
                         onChange={onInputChange}
                       />
                     </div>
@@ -143,8 +195,8 @@ function NewArvoreModal() {
                         id="endereco"
                         type="text"
                         placeholder=""
-                        //value={arvores.n_tag || ""}
-                        required
+                        value={newArvore.endereco || ""}
+                        //required
                         onChange={onInputChange}
                       />
                     </div>
@@ -159,8 +211,8 @@ function NewArvoreModal() {
                         id="latitude"
                         type="text"
                         placeholder="ex: -23.5505"
-                        //value={arvores.n_tag || ""}
-                        required
+                        value={newArvore.latitude || ""}
+                        //required
                         onChange={onInputChange}
                       />
                     </div>
@@ -173,8 +225,8 @@ function NewArvoreModal() {
                         id="longitude"
                         type="text"
                         placeholder="ex: -46.6333"
-                        //value={arvores.n_tag || ""}
-                        required
+                        value={newArvore.longitude || ""}
+                        //required
                         onChange={onInputChange}
                       />
                     </div>
@@ -189,8 +241,8 @@ function NewArvoreModal() {
                         id="justificativa"
                         type="text"
                         placeholder=""
-                        //value={arvores.n_tag || ""}
-                        required
+                        value={newArvore.justificativa || ""}
+                        //required
                         onChange={onInputChange}
                       />
                     </div>
@@ -205,8 +257,8 @@ function NewArvoreModal() {
                         id="foto1"
                         type="text"
                         placeholder=""
-                        //value={arvores.n_tag || ""}
-                        required
+                        value={newArvore.foto1 || ""}
+                        //required
                         onChange={onInputChange}
                       />
                     </div>
@@ -221,8 +273,8 @@ function NewArvoreModal() {
                         id="foto2"
                         type="text"
                         placeholder=""
-                        //value={arvores.n_tag || ""}
-                        required
+                        value={newArvore.foto2 || ""}
+                        //required
                         onChange={onInputChange}
                       />
                     </div>

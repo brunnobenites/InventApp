@@ -31,8 +31,12 @@ async function getAllArvores(req, res, next) {
 
 async function insertArvore(req, res, next) {
   try {
-    const newArvore = req.body; // Supondo que o corpo da requisição contém os dados da nova árvore
-    const arvore = await arvoresRepository.insertArvore(newArvore);
+    const { id_inventario, ...newArvore } = req.body; // Separar o id_inventario dos demais campos
+    if (!id_inventario) {
+      return res.status(400).json({ error: "Campo 'id_inventario' é obrigatório." });
+    }
+
+    const arvore = await arvoresRepository.insertArvore({ id_inventario, ...newArvore });
     res.status(201).json(arvore); // Retornar a árvore criada com o status 201 (Created)
   } catch (error) {
     console.error("Erro ao inserir árvore:", error);

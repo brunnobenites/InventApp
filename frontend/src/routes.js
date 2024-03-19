@@ -27,15 +27,15 @@ function Routes() {
       <PrivateRoute path="/settings">
         <Settings />
       </PrivateRoute>
-      <PrivateRoute path="/inventarios">
-        <Inventarios />
-      </PrivateRoute>
       <PrivateRoute path="/inventarios/:id_inventario">
         <SelectInventario />
       </PrivateRoute>
-      <PrivateRoute path="/arvores">
-        <Arvores />
+      <PrivateRoute path="/inventarios">
+        <Inventarios />
       </PrivateRoute>
+      <Route path="/arvores">
+        <Arvores />
+      </Route>
     </BrowserRouter>
   );
 }

@@ -16,9 +16,23 @@ export async function getAllArvores() {
   return response.data;
 }
 
-export async function insertArvore(newArvore) {
+// export async function insertArvore(newArvore) {
+//   try {
+//     const response = await axios.post(ARVORES_URL, newArvore);
+//     console.log("Resposta da requisição POST:", response);
+//     return response.data;
+//   } catch (error) {
+//     throw new Error("Erro ao inserir árvore no banco de dados.");
+//   }
+// }
+
+export async function insertArvore(newArvore, id_inventario) {
   try {
+    // Adicionando o id_inventario ao objeto newArvore
+    newArvore.id_inventario = id_inventario;
+
     const response = await axios.post(ARVORES_URL, newArvore);
+    console.log("Resposta da requisição POST:", response);
     return response.data;
   } catch (error) {
     throw new Error("Erro ao inserir árvore no banco de dados.");

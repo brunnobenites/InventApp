@@ -8,7 +8,13 @@ const arvoresModel = database.define("arvores", {
     allowNull: false,
     primaryKey: true,
   },
-  id_inventario: Sequelize.INTEGER,
+  id_inventario: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: 'inventarios', // nome da tabela referenciada
+      key: 'id_inventario', // campo da tabela referenciada
+    }
+  },
   n_tag: Sequelize.INTEGER,
   especie: Sequelize.STRING,
   altura: Sequelize.FLOAT,
@@ -28,7 +34,6 @@ const arvoresModel = database.define("arvores", {
   foto1: Sequelize.STRING,
   foto2: Sequelize.STRING,
   justificativa: Sequelize.STRING,
-  id_inventario: Sequelize.INTEGER,
   legfoto1: Sequelize.STRING,
   legfoto2: Sequelize.STRING,
   createdAt: Sequelize.DATE,

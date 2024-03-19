@@ -11,7 +11,13 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      id_inventario: DataTypes.INTEGER,
+      id_inventario: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'inventarios', // nome da tabela referenciada
+          key: 'id_inventario', // campo da tabela referenciada
+        }
+      },
       n_tag: DataTypes.INTEGER,
       especie: DataTypes.STRING,
       altura: DataTypes.FLOAT,
@@ -31,7 +37,6 @@ module.exports = {
       foto1: DataTypes.STRING,
       foto2: DataTypes.STRING,
       justificativa: DataTypes.STRING,
-      id_inventario: DataTypes.INTEGER,
       legfoto1: DataTypes.STRING,
       legfoto2: DataTypes.STRING,
       createdAt: DataTypes.DATE,

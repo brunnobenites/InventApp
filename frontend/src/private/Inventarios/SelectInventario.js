@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { getAllInventarios } from "../../services/InventariosService";
 
@@ -28,7 +28,7 @@ function SelectInventario(props) {
     }
 
     fetchInventarios();
-  }, [props.onChange]);
+  }, []); // Remova props.onChange da lista de dependências
 
   const handleSelectChange = (event) => {
     const selectedId = event.target.value;
@@ -46,35 +46,31 @@ function SelectInventario(props) {
     }
   };
 
-  const selectInventario = useMemo(() => {
-    return (
-      <div className="form-group mb-4">
-        <label htmlFor="id_inventario">ID Inventário:</label>
-        <div className="input-group">
-          <button
-            type="button"
-            className="btn btn-secondary d-inline-flex align-items-center"
-          ></button>
-          <select
-            id="id_inventario"
-            className="form-select"
-            onChange={handleSelectChange}
-          >
-            {inventarios.map((inventario) => (
-              <option
-                key={inventario.id_inventario}
-                value={inventario.id_inventario}
-              >
-                {inventario.id_inventario} - {inventario.name}
-              </option>
-            ))}
-          </select>
-        </div>
+  return (
+    <div className="form-group mb-4">
+      <label htmlFor="id_inventario">ID Inventário:</label>
+      <div className="input-group">
+        <button
+          type="button"
+          className="btn btn-secondary d-inline-flex align-items-center"
+        ></button>
+        <select
+          id="id_inventario"
+          className="form-select"
+          onChange={handleSelectChange}
+        >
+          {inventarios.map((inventario) => (
+            <option
+              key={inventario.id_inventario}
+              value={inventario.id_inventario}
+            >
+              {inventario.id_inventario} - {inventario.name}
+            </option>
+          ))}
+        </select>
       </div>
-    );
-  }, [history, inventarios, nomeInventario, props.onChange]);
-
-  return selectInventario;
+    </div>
+  );
 }
 
 export default SelectInventario;
