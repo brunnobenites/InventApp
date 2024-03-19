@@ -56,10 +56,6 @@ app.delete("/arvores/:id_arvore", arvoresController.deleteArvore);
 
 app.post("/logout", authController.doLogout);
 
-app.use("/", (req, res, next) => {
-  res.send("Hello World!");
-}); //middleware com / generico coloca por ultimo
-
 app.use(errorMiddleware); //middleware de erro sempre no final
 
 module.exports = app;

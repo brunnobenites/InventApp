@@ -33,9 +33,12 @@ function Routes() {
       <PrivateRoute path="/inventarios">
         <Inventarios />
       </PrivateRoute>
-      <Route path="/arvores">
+      <PrivateRoute path="/arvores/:id_arvore">
         <Arvores />
-      </Route>
+      </PrivateRoute>
+      <PrivateRoute path="/arvores">
+        <Arvores />
+      </PrivateRoute>
     </BrowserRouter>
   );
 }

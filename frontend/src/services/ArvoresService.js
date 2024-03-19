@@ -16,25 +16,24 @@ export async function getAllArvores() {
   return response.data;
 }
 
-// export async function insertArvore(newArvore) {
-//   try {
-//     const response = await axios.post(ARVORES_URL, newArvore);
-//     console.log("Resposta da requisição POST:", response);
-//     return response.data;
-//   } catch (error) {
-//     throw new Error("Erro ao inserir árvore no banco de dados.");
-//   }
-// }
-
-export async function insertArvore(newArvore, id_inventario) {
+export async function insertArvore(newArvore) {
   try {
-    // Adicionando o id_inventario ao objeto newArvore
-    newArvore.id_inventario = id_inventario;
-
     const response = await axios.post(ARVORES_URL, newArvore);
     console.log("Resposta da requisição POST:", response);
-    return response.data;
+    return response; // Retornar a resposta completa, incluindo o status
   } catch (error) {
+    console.log("Erro na requisição POST:", error.response); // Log do erro para depuração
     throw new Error("Erro ao inserir árvore no banco de dados.");
+  }
+}
+
+export async function deleteArvore(id_arvore) {
+  try {
+    const response = await axios.delete(`${ARVORES_URL}/${id_arvore}`);
+    console.log("Resposta da requisição DELETE:", response);
+    return response.data; // Retorne apenas os dados da resposta
+  } catch (error) {
+    console.log("Erro na requisição DELETE:", error.response); // Log do erro para depuração
+    throw new Error("Erro ao excluir árvore do banco de dados.");
   }
 }

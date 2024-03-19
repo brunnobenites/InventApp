@@ -1,72 +1,81 @@
 import React, { useEffect, useRef, useState } from "react";
 import SelectInventario from "../Inventarios/SelectInventario";
 import { useHistory } from "react-router-dom";
-import {insertArvore} from "../../services/ArvoresService"
+import { insertArvore } from "../../services/ArvoresService";
 
-function NewArvoreModal({id_inventario}) {
+function NewArvoreModal({ id_inventario, updateArvoresList }) {
   const history = useHistory();
-  const btnClose = useRef(null);
+  const btnClose = useRef("");
   const [newArvore, setNewArvore] = useState({});
   const [error, setError] = useState("");
 
   useEffect(() => {
     setNewArvore({
-      n_tag: '',
-      especie: '',
-      altura: '',
-      cap1: '',
-      cap2: '',
-      cap3: '',
-      cap4: '',
-      cap5: '',
-      cap6: '',
-      cap7: '',
-      cap8: '',
-      cap9: '',
-      cap10: '',
-      endereco: '',
-      latitude: '',
-      longitude: '',
-      foto1: '',
-      foto2: '',
-      justificativa: '',
-      legfoto1: '',
-      legfoto2: '',
+      n_tag: "",
+      especie: "",
+      altura: "",
+      cap1: "",
+      cap2: "",
+      cap3: "",
+      cap4: "",
+      cap5: "",
+      cap6: "",
+      cap7: "",
+      cap8: "",
+      cap9: "",
+      cap10: "",
+      endereco: "",
+      latitude: "",
+      longitude: "",
+      foto1: "",
+      foto2: "",
+      justificativa: "",
+      legfoto1: "",
+      legfoto2: "",
       id_inventario: id_inventario,
-    })
-  }, [id_inventario])
-  
-  
-  async function onFormSubmit(event) {
-    event.preventDefault();
-    try {
-      console.log("New Arvore Object:", newArvore); // Imprimir o objeto newArvore antes da requisição
-      const response = await insertArvore({ ...newArvore, id_inventario });
-      console.log("Resposta do servidor:", response);
-      // Verificar se a resposta foi bem-sucedida
-      if (response.status === 201) {
-        // Sucesso: redirecionar o usuário ou exibir uma mensagem de sucesso
-        history.push("/arvores");
-      } else {
-        // Resposta com erro: exibir mensagem de erro ao usuário
-        setError("Erro ao inserir árvore. Por favor, tente novamente.");
-      }
-    } catch (error) {
-      console.log("Erro na requisição:", error); // Imprimir o erro capturado
-      // Erro na requisição: exibir mensagem de erro ao usuário
-      setError("Erro ao enviar requisição. Por favor, tente novamente mais tarde.");
-    }
-  }
-  
+    });
+  }, [id_inventario]);
 
-   function onInputChange(event) {
+  function onFormSubmit(event) {
+    event.preventDefault();
+
+    // Verificar se id_inventario está presente
+    if (!newArvore.id_inventario) {
+      setError("ID do inventário não especificado.");
+      return;
+    }
+    // Chamar a função insertArvore apenas se o id_inventario estiver presente
+    insertArvore({ ...newArvore })
+      .then((response) => {
+        console.log("Resposta do servidor:", response);
+        if (response.status === 201) {
+          btnClose.current.click();
+          // Chamar a função de atualizar a lista passada por prop
+          updateArvoresList();
+          setError(""); // Limpa o erro caso haja algum
+        } else {
+          setError("Erro ao inserir árvore. Por favor, tente novamente.");
+        }
+      })
+      .catch((error) => {
+        console.log("Erro na requisição:", error);
+        setError(
+          "Erro ao enviar requisição. Por favor, tente novamente mais tarde."
+        );
+      });
+  }
+
+  function onInputChange(event) {
+    const { id, value, type } = event.target;
+    const parsedValue = type === "number" ? parseFloat(value) : value;
+
     setNewArvore({
       ...newArvore,
-      [event.target.id]: event.target.value,
+      [id]: parsedValue,
     });
   }
-  
-   return (
+
+  return (
     <div
       className="modal fade"
       id="modalNewArvore"
@@ -105,8 +114,8 @@ function NewArvoreModal({id_inventario}) {
                       <input
                         className="form-control"
                         id="n_tag"
-                        type="text"
-                        placeholder=""
+                        type="number"
+                        placeholder="00"
                         value={newArvore.n_tag || ""}
                         //required
                         onChange={onInputChange}
@@ -131,12 +140,12 @@ function NewArvoreModal({id_inventario}) {
                 <div className="row">
                   <div className="col-md-3 mb-2">
                     <div className="form-group">
-                      <label htmlFor="altura">Altura:</label>
+                      <label htmlFor="altura">Altura (m):</label>
                       <input
                         className="form-control"
                         id="altura"
-                        type="text"
-                        placeholder=""
+                        type="number"
+                        placeholder="00"
                         value={newArvore.altura || ""}
                         //required
                         onChange={onInputChange}
@@ -145,12 +154,12 @@ function NewArvoreModal({id_inventario}) {
                   </div>
                   <div className="col-md-3 mb-2">
                     <div className="form-group">
-                      <label htmlFor="cap1">CAP1:</label>
+                      <label htmlFor="cap1">CAP1 (cm):</label>
                       <input
                         className="form-control"
                         id="cap1"
-                        type="text"
-                        placeholder=""
+                        type="number"
+                        placeholder="00"
                         value={newArvore.cap1 || ""}
                         //required
                         onChange={onInputChange}
@@ -159,12 +168,12 @@ function NewArvoreModal({id_inventario}) {
                   </div>
                   <div className="col-md-3 mb-2">
                     <div className="form-group">
-                      <label htmlFor="cap2">CAP2:</label>
+                      <label htmlFor="cap2">CAP2 (cm):</label>
                       <input
                         className="form-control"
                         id="cap2"
-                        type="text"
-                        placeholder=""
+                        type="number"
+                        placeholder="00"
                         value={newArvore.cap2 || ""}
                         //required
                         onChange={onInputChange}
@@ -173,12 +182,12 @@ function NewArvoreModal({id_inventario}) {
                   </div>
                   <div className="col-md-3 mb-2">
                     <div className="form-group">
-                      <label htmlFor="cap3">CAP3:</label>
+                      <label htmlFor="cap3">CAP3 (cm):</label>
                       <input
                         className="form-control"
                         id="cap3"
-                        type="text"
-                        placeholder=""
+                        type="number"
+                        placeholder="00"
                         value={newArvore.cap3 || ""}
                         //required
                         onChange={onInputChange}
@@ -209,7 +218,7 @@ function NewArvoreModal({id_inventario}) {
                       <input
                         className="form-control"
                         id="latitude"
-                        type="text"
+                        type="number"
                         placeholder="ex: -23.5505"
                         value={newArvore.latitude || ""}
                         //required
@@ -223,7 +232,7 @@ function NewArvoreModal({id_inventario}) {
                       <input
                         className="form-control"
                         id="longitude"
-                        type="text"
+                        type="number"
                         placeholder="ex: -46.6333"
                         value={newArvore.longitude || ""}
                         //required
