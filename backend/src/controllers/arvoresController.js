@@ -33,10 +33,15 @@ async function insertArvore(req, res, next) {
   try {
     const { id_inventario, ...newArvore } = req.body; // Separar o id_inventario dos demais campos
     if (!id_inventario) {
-      return res.status(400).json({ error: "Campo 'id_inventario' é obrigatório." });
+      return res
+        .status(400)
+        .json({ error: "Campo 'id_inventario' é obrigatório." });
     }
 
-    const arvore = await arvoresRepository.insertArvore({ id_inventario, ...newArvore });
+    const arvore = await arvoresRepository.insertArvore({
+      id_inventario,
+      ...newArvore,
+    });
     res.status(201).json(arvore); // Retornar a árvore criada com o status 201 (Created)
   } catch (error) {
     console.error("Erro ao inserir árvore:", error);
@@ -55,4 +60,25 @@ async function deleteArvore(req, res, next) {
   }
 }
 
-module.exports = { getArvore, getAllArvores, insertArvore, deleteArvore };
+async function updateArvore(req, res, next) {
+  try {
+    const id_arvore = req.params.id_arvore;
+    const updatedArvore = req.body;
+    const arvore = await arvoresRepository.updateArvore(
+      id_arvore,
+      updatedArvore
+    );
+    res.json(arvore);
+  } catch (error) {
+    console.error("Erro ao atualizar árvore:", error);
+    res.status(500).json({ error: "Erro ao atualizar árvore." });
+  }
+}
+
+module.exports = {
+  getArvore,
+  getAllArvores,
+  insertArvore,
+  deleteArvore,
+  updateArvore,
+};

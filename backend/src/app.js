@@ -57,6 +57,8 @@ app.get("/arvores/:id_arvore", arvoresController.getArvore);
 
 app.post("/arvores", arvoresController.insertArvore);
 
+app.patch("/arvores/:id_arvore", arvoresController.updateArvore);
+
 app.delete("/arvores/:id_arvore", arvoresController.deleteArvore);
 
 app.post("/logout", authController.doLogout);

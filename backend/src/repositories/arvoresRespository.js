@@ -33,7 +33,6 @@ async function insertArvore(newArvore) {
   }
 }
 
-
 async function deleteArvore(id_arvore) {
   try {
     const arvore = await arvoresModel.findByPk(id_arvore);
@@ -47,4 +46,23 @@ async function deleteArvore(id_arvore) {
   }
 }
 
-module.exports = { getArvore, getAllArvores, insertArvore, deleteArvore };
+async function updateArvore(id_arvore, updatedArvore) {
+  try {
+    const arvore = await arvoresModel.findByPk(id_arvore);
+    if (!arvore) {
+      throw new Error("Árvore não encontrada.");
+    }
+    const updated = await arvore.update(updatedArvore);
+    return updated;
+  } catch (error) {
+    throw new Error("Erro ao atualizar árvore no banco de dados.");
+  }
+}
+
+module.exports = {
+  getArvore,
+  getAllArvores,
+  insertArvore,
+  deleteArvore,
+  updateArvore,
+};
