@@ -1,105 +1,80 @@
 import React, { useEffect, useRef, useState } from "react";
 import SelectInventario from "../Inventarios/SelectInventario";
+import { getArvore } from "../../services/ArvoresService";
 import { useHistory } from "react-router-dom";
-import { insertArvore } from "../../services/ArvoresService";
-import { getAllInventarios } from "../../services/InventariosService";
+import { updateArvore } from "../../services/ArvoresService";
 
-function NewArvoreModal({ id_inventario, updateArvoresList }) {
+function UpdateArvoreModal({ id_arvore, id_inventario }) {
   const history = useHistory();
   const btnClose = useRef("");
   const [newArvore, setNewArvore] = useState({});
-  const [lastInventarioId, setLastInventarioId] = useState(null); // [1
   const [error, setError] = useState("");
 
-  const setDefaultArvore = (id_inventario) => {
-    setNewArvore({
-      n_tag: "",
-      especie: "",
-      altura: "",
-      cap1: "",
-      cap2: "",
-      cap3: "",
-      cap4: "",
-      cap5: "",
-      cap6: "",
-      cap7: "",
-      cap8: "",
-      cap9: "",
-      cap10: "",
-      endereco: "",
-      latitude: "",
-      longitude: "",
-      foto1: "",
-      foto2: "",
-      justificativa: "",
-      legfoto1: "",
-      legfoto2: "",
-      id_inventario: id_inventario,
-    });
-  };
+  function handleInputChange(event) {
+    const { id, value } = event.target;
+    setNewArvore((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+  }
 
   useEffect(() => {
-    async function fetchLastInventarioId() {
-      try {
-        let inventariosData = await getAllInventarios();
-        inventariosData.sort(
-          (a, b) => new Date(b.created_at) - new Date(a.created_at)
-        );
-        if (inventariosData.length > 0) {
-          setLastInventarioId(inventariosData[0].id_inventario);
-        }
-      } catch (error) {
-        console.error("Erro ao obter inventários:", error);
-      }
+    if (id_arvore) {
+      getArvore(id_arvore).then((arvore) => {
+        setNewArvore(arvore);
+      });
+    } else {
+      setNewArvore({
+        id_arvore: "",
+        n_tag: "",
+        especie: "",
+        altura: "",
+        cap1: "",
+        cap2: "",
+        cap3: "",
+        cap4: "",
+        cap5: "",
+        cap6: "",
+        cap7: "",
+        cap8: "",
+        cap9: "",
+        cap10: "",
+        endereco: "",
+        latitude: "",
+        longitude: "",
+        foto1: "",
+        foto2: "",
+        justificativa: "",
+        legfoto1: "",
+        legfoto2: "",
+        id_inventario: id_inventario,
+      });
     }
+  }, [id_inventario, id_arvore]);
 
-    fetchLastInventarioId();
-  }, []);
-
-  function onFormSubmit(event) {
+  async function onFormSubmit(event) {
     event.preventDefault();
-
-    // Verificar se id_inventario está presente
-    if (!newArvore.id_inventario) {
+    //Verificar se id_inventario está presente
+    if (!newArvore.id_inventario || !id_arvore) {
       setError("ID do inventário não especificado.");
       return;
     }
-
     // Chamar a função insertArvore apenas se o id_inventario estiver presente
-    insertArvore({ ...newArvore })
-      .then((response) => {
-        console.log("Resposta do servidor:", response);
-        if (response.status === 201) {
-          btnClose.current.click();
-          // Chamar a função de atualizar a lista passada por prop
-          updateArvoresList();
-          setError(""); // Limpa o erro caso haja algum
-        } else {
-          setError("Erro ao inserir árvore. Por favor, tente novamente.");
-        }
-      })
-      .catch((error) => {
-        console.log("Erro na requisição:", error);
-        setError(
-          "Erro ao enviar requisição. Por favor, tente novamente mais tarde."
-        );
-      });
-  }
-
-  function onInputChange(event) {
-    const { id, value, type } = event.target;
-    const parsedValue = type === "number" ? parseFloat(value) : value;
-
-    setNewArvore({
-      ...newArvore,
-      [id]: parsedValue,
-    });
+    try {
+      await updateArvore(id_arvore, newArvore);
+      // Se a requisição for bem sucedida, feche o modal e recarregue a página
+      btnClose.current.click();
+      history.go(0);
+    } catch (error) {
+      // Se houver um erro, defina a mensagem de erro
+      setError("Erro ao atualizar árvore.");
+    }
   }
 
   return (
     <div
       className="modal fade"
-      id="modalNewArvore"
+      id="modalUpdateArvore"
       tabIndex="-1"
       role="dialog"
       aria-labelledby="modalTitleNotify"
@@ -108,7 +83,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
       <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <b className="modal-title">NOVA ÁRVORE</b>
+            <b className="modal-title">ATUALIZAR ÁRVORE</b>
             <button
               ref={btnClose}
               type="button"
@@ -121,13 +96,25 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
             <div className="form-group">
               <div className="col-md-12">
                 <div className="row">
+                  <div className="col-md-3 mb-2">
+                    <div className="form-group">
+                      <label htmlFor="id_inventario">ID Árvore:</label>
+                      <input
+                        className="form-control"
+                        id="id_arvore"
+                        type="number"
+                        value={newArvore.id_arvore}
+                        disabled={true}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
                   <SelectInventario
-                    onChange={onInputChange}
-                    id_inventario={lastInventarioId}
-                    selectLast={true}
+                    id_inventario={newArvore.id_inventario}
+                    onChange={handleInputChange}
                   />
                 </div>
-
                 <li
                   role="separator"
                   className="dropdown-divider mt-2 mb-2 col-12 p-0"
@@ -143,7 +130,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                         placeholder="00"
                         value={newArvore.n_tag || ""}
                         //required
-                        onChange={onInputChange}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
@@ -157,7 +144,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                         placeholder="Espécie da Árvore"
                         value={newArvore.especie || ""}
                         //required
-                        onChange={onInputChange}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
@@ -173,7 +160,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                         placeholder="00"
                         value={newArvore.altura || ""}
                         //required
-                        onChange={onInputChange}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
@@ -187,7 +174,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                         placeholder="00"
                         value={newArvore.cap1 || ""}
                         //required
-                        onChange={onInputChange}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
@@ -201,7 +188,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                         placeholder="00"
                         value={newArvore.cap2 || ""}
                         //required
-                        onChange={onInputChange}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
@@ -215,7 +202,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                         placeholder="00"
                         value={newArvore.cap3 || ""}
                         //required
-                        onChange={onInputChange}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
@@ -231,7 +218,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                         placeholder=""
                         value={newArvore.endereco || ""}
                         //required
-                        onChange={onInputChange}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
@@ -247,7 +234,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                         placeholder="ex: -23.5505"
                         value={newArvore.latitude || ""}
                         //required
-                        onChange={onInputChange}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
@@ -261,7 +248,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                         placeholder="ex: -46.6333"
                         value={newArvore.longitude || ""}
                         //required
-                        onChange={onInputChange}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
@@ -277,7 +264,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                         placeholder=""
                         value={newArvore.justificativa || ""}
                         //required
-                        onChange={onInputChange}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
@@ -293,7 +280,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                         placeholder=""
                         value={newArvore.foto1 || ""}
                         //required
-                        onChange={onInputChange}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
@@ -309,7 +296,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                         placeholder=""
                         value={newArvore.foto2 || ""}
                         //required
-                        onChange={onInputChange}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
@@ -328,7 +315,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
               type="button"
               onClick={onFormSubmit}
             >
-              Salvar
+              Atualizar e Salvar
             </button>
           </div>
         </div>
@@ -337,4 +324,4 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
   );
 }
 
-export default NewArvoreModal;
+export default UpdateArvoreModal;

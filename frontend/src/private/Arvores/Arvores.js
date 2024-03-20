@@ -5,6 +5,7 @@ import { getAllArvores, deleteArvore } from "../../services/ArvoresService";
 import { getAllInventarios } from "../../services/InventariosService";
 import NewArvoreButton from "./NewArvoreButton";
 import NewArvoreModal from "./NewArvoreModal";
+import UpdateArvoreModal from "./UpdateArvoreModal";
 
 /**
  * props:
@@ -17,15 +18,12 @@ function Arvores() {
   const history = useHistory();
   const [arvores, setArvores] = useState([]);
   const [inventarios, setInventarios] = useState([]); // Adicione um estado para os inventários
+  const [selectedArvoreId, setSelectedArvoreId] = useState(null); // Adicione um estado para a árvore selecionada [1/2
   const [error, setError] = useState("");
 
-  // function getActiveInventario(isActive) {
-  //   return isActive ? "text-success" : "text-danger";
-  // }
-
-  // function getActiveText(isActive) {
-  //   return isActive ? "Em Andamento" : "Concluído";
-  // }
+  function onEditClick(id_arvore) {
+    setSelectedArvoreId(id_arvore);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,28 +47,24 @@ function Arvores() {
   }, [history]);
 
   const onDeleteClick = async (id_arvore) => {
-    try {
-      await deleteArvore(id_arvore);
-      console.log("Árvore excluída com sucesso!");
-      // Atualizar a lista de árvores após a exclusão
-      const dataArvores = await getAllArvores();
-      setArvores(dataArvores);
-    } catch (err) {
-      console.error(
-        "Erro ao excluir árvore:",
-        err.response ? err.response.data : err.message
-      );
+    const confirmDelete = window.confirm(
+      "Tem certeza de que deseja excluir esta árvore?"
+    );
+    if (confirmDelete) {
+      try {
+        await deleteArvore(id_arvore);
+        console.log("Árvore excluída com sucesso!");
+        // Atualizar a lista de árvores após a exclusão
+        const dataArvores = await getAllArvores();
+        setArvores(dataArvores);
+      } catch (err) {
+        console.error(
+          "Erro ao excluir árvore:",
+          err.response ? err.response.data : err.message
+        );
+      }
     }
   };
-
-  // function onEditClick(event) {
-  //   const id = event.target.id.replace("delete", "");
-  //   deleteArvore(id).then((arvore) => {
-  //     history.go[0].catch((err) =>
-  //       console.error(err.response ? err.response.data : err.message)
-  //     );
-  //   });
-  // }
 
   // Função para atualizar a lista de árvores
   const updateArvoresList = async () => {
@@ -150,8 +144,8 @@ function Arvores() {
                           className="btn btn-secondary btn-xs ms-2"
                           tittle="Editar esta Árvore"
                           data-bs-toggle="modal"
-                          data-bs-target="#modalNewArvore"
-                          //onClick={onEditClick}
+                          data-bs-target="#modalUpdateArvore"
+                          onClick={() => onEditClick(arvore.id_arvore)}
                         >
                           <svg
                             className="icon icon-xs"
@@ -263,6 +257,7 @@ function Arvores() {
         </div>
       </main>
       <NewArvoreModal updateArvoresList={updateArvoresList} />
+      <UpdateArvoreModal id_arvore={selectedArvoreId} />
     </React.Fragment>
   );
 }

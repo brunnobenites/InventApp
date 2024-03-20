@@ -37,3 +37,13 @@ export async function deleteArvore(id_arvore) {
     throw new Error("Erro ao excluir árvore do banco de dados.");
   }
 }
+
+export async function updateArvore(id_arvore, updatedArvore) {
+  try {
+    const arvoreUrl = `${ARVORES_URL}/${id_arvore}`;
+    const response = await axios.patch(arvoreUrl, updatedArvore);
+    return response.data;
+  } catch (error) {
+    throw new Error("Erro ao atualizar árvore no banco de dados.");
+  }
+}

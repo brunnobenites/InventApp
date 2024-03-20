@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { getAllInventarios } from "../../services/InventariosService";
 
-function SelectInventario(props) {
+function SelectInventario({ id_inventario, onChange, selectLast }) {
   const history = useHistory();
   const [inventarios, setInventarios] = useState([]);
   const [nomeInventario, setNomeInventario] = useState("");
@@ -10,16 +10,30 @@ function SelectInventario(props) {
   useEffect(() => {
     async function fetchInventarios() {
       try {
-        const inventariosData = await getAllInventarios();
+        let inventariosData = await getAllInventarios();
+        // Ordena os inventários por data de criação, do mais recente para o mais antigo
+        inventariosData = inventariosData.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
         setInventarios(inventariosData);
         if (inventariosData.length > 0) {
-          setNomeInventario(inventariosData[0].name);
-          props.onChange({
-            target: {
-              id: "id_inventario",
-              value: inventariosData[0].id_inventario,
-            },
-          });
+          let selectedInventario;
+          if (id_inventario) {
+            selectedInventario = inventariosData.find(
+              (inventario) => inventario.id_inventario == id_inventario
+            );
+          } else if (selectLast) {
+            selectedInventario = inventariosData[0]; // O primeiro item é o mais recente
+          }
+          if (selectedInventario) {
+            setNomeInventario(selectedInventario.name);
+            onChange({
+              target: {
+                id: "id_inventario",
+                value: selectedInventario.id_inventario,
+              },
+            });
+          }
         }
       } catch (error) {
         console.error("Erro ao obter inventários:", error);
@@ -28,21 +42,24 @@ function SelectInventario(props) {
     }
 
     fetchInventarios();
-  }, []); // Remova props.onChange da lista de dependências
+  }, [id_inventario]);
 
   const handleSelectChange = (event) => {
     const selectedId = event.target.value;
     const selectedInventario = inventarios.find(
       (inventario) => inventario.id_inventario == selectedId
     );
+
     if (selectedInventario) {
       setNomeInventario(selectedInventario.name); // Define o nome do inventário selecionado
-      props.onChange({
-        target: {
-          id: "id_inventario",
-          value: selectedInventario.id_inventario,
-        },
-      });
+      if (typeof onChange === "function") {
+        onChange({
+          target: {
+            id: "id_inventario",
+            value: selectedInventario.id_inventario,
+          },
+        });
+      }
     }
   };
 
@@ -63,6 +80,7 @@ function SelectInventario(props) {
             <option
               key={inventario.id_inventario}
               value={inventario.id_inventario}
+              selected={inventario.id_inventario == id_inventario}
             >
               {inventario.id_inventario} - {inventario.name}
             </option>
