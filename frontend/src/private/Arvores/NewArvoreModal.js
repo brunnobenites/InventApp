@@ -5,6 +5,7 @@ import { insertArvore, getAllArvores } from "../../services/ArvoresService";
 import { getAllInventarios } from "../../services/InventariosService";
 import FormWithLocation from "../../components/Coordinate/Coordinate";
 import FormWithCamera from "../../components/Photos/Photos";
+import FormCap from "../../components/Cap/Cap";
 
 function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
   const history = useHistory();
@@ -181,49 +182,10 @@ function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
                       />
                     </div>
                   </div>
-                  <div className="col-md-3 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="cap1">CAP1 (cm):</label>
-                      <input
-                        className="form-control"
-                        id="cap1"
-                        type="number"
-                        placeholder="00"
-                        value={newArvore.cap1 || ""}
-                        //required
-                        onChange={onInputChange}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-3 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="cap2">CAP2 (cm):</label>
-                      <input
-                        className="form-control"
-                        id="cap2"
-                        type="number"
-                        placeholder="00"
-                        value={newArvore.cap2 || ""}
-                        //required
-                        onChange={onInputChange}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-3 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="cap3">CAP3 (cm):</label>
-                      <input
-                        className="form-control"
-                        id="cap3"
-                        type="number"
-                        placeholder="00"
-                        value={newArvore.cap3 || ""}
-                        //required
-                        onChange={onInputChange}
-                      />
-                    </div>
-                  </div>
                 </div>
+                <dib className="row">
+                  <FormCap />
+                </dib>
                 <div className="row">
                   <div className="col-md-12 mb-2">
                     <div className="form-group">
