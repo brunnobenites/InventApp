@@ -11,9 +11,9 @@ export async function getArvore(id_arvore) {
   return response.data;
 }
 
-export async function getAllArvores() {
-  const response = await axios.get(ARVORES_URL);
-  return response.data;
+export async function getAllArvores(page = 1) {
+  const response = await axios.get(`${ARVORES_URL}?page=${page}`);
+  return { data: response.data.arvores, total: response.data.total };
 }
 
 export async function insertArvore(newArvore) {

@@ -12,12 +12,24 @@ async function getArvore(id_arvore) {
   }
 }
 
-async function getAllArvores() {
+async function getAllArvores(limit, offset) {
   try {
-    const arvores = await arvoresModel.findAll();
+    const arvores = await arvoresModel.findAll({
+      limit: limit,
+      offset: offset,
+    });
     return arvores;
   } catch (error) {
     throw new Error("Erro ao buscar todas as árvores do banco de dados.");
+  }
+}
+
+async function countArvores() {
+  try {
+    const count = await arvoresModel.count();
+    return count;
+  } catch (error) {
+    throw new Error("Erro ao contar todas as árvores do banco de dados.");
   }
 }
 
@@ -65,4 +77,5 @@ module.exports = {
   insertArvore,
   deleteArvore,
   updateArvore,
+  countArvores,
 };

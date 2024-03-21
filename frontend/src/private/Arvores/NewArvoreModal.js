@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import SelectInventario from "../Inventarios/SelectInventario";
 import { useHistory } from "react-router-dom";
-import { insertArvore } from "../../services/ArvoresService";
+import { insertArvore, getAllArvores } from "../../services/ArvoresService";
 import { getAllInventarios } from "../../services/InventariosService";
+import FormWithLocation from "../../components/Coordinate/Coordinate";
+import FormWithCamera from "../../components/Photos/Photos";
 
-function NewArvoreModal({ id_inventario, updateArvoresList }) {
+function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
   const history = useHistory();
   const btnClose = useRef("");
   const [newArvore, setNewArvore] = useState({});
@@ -67,12 +69,14 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
 
     // Chamar a função insertArvore apenas se o id_inventario estiver presente
     insertArvore({ ...newArvore })
-      .then((response) => {
+      .then(async (response) => {
         console.log("Resposta do servidor:", response);
         if (response.status === 201) {
           btnClose.current.click();
           // Chamar a função de atualizar a lista passada por prop
           updateArvoresList();
+          const { total } = await getAllArvores();
+          setPage(Math.ceil(total / 10)); // Navigate to the last page
           setError(""); // Limpa o erro caso haja algum
         } else {
           setError("Erro ao inserir árvore. Por favor, tente novamente.");
@@ -236,36 +240,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-md-6 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="latitude">Latitude:</label>
-                      <input
-                        className="form-control"
-                        id="latitude"
-                        type="number"
-                        placeholder="ex: -23.5505"
-                        value={newArvore.latitude || ""}
-                        //required
-                        onChange={onInputChange}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="longitude">Longitude:</label>
-                      <input
-                        className="form-control"
-                        id="longitude"
-                        type="number"
-                        placeholder="ex: -46.6333"
-                        value={newArvore.longitude || ""}
-                        //required
-                        onChange={onInputChange}
-                      />
-                    </div>
-                  </div>
-                </div>
+                <FormWithLocation />
                 <div className="row">
                   <div className="col-md-12 mb-2">
                     <div className="form-group">
@@ -282,7 +257,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                     </div>
                   </div>
                 </div>
-                <div className="row">
+                {/* <div className="row">
                   <div className="col-md-12 mb-2">
                     <div className="form-group">
                       <label htmlFor="foto1">Foto 1:</label>
@@ -313,7 +288,8 @@ function NewArvoreModal({ id_inventario, updateArvoresList }) {
                       />
                     </div>
                   </div>
-                </div>
+                </div> */}
+                <FormWithCamera />
               </div>
             </div>
           </div>

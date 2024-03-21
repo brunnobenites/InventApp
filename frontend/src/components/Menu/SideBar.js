@@ -66,13 +66,13 @@ function SideBar() {
             >
               <span className="sidebar-icon">
                 <img
-                  src="/img/icons/tree.png"
+                  src="/img/icons/tree2.png"
                   height="32"
                   width="32"
                   alt="InvestApp Logo"
                 />
               </span>
-              <span className="mt-1 ms-1 sidebar-text">InventApp Menu</span>
+              <span className="mt-1 ms-1 sidebar-text">InventApp</span>
             </Link>
           </li>
           <li className={getClassName("/inventarios")}>

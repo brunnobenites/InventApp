@@ -21,8 +21,12 @@ async function getArvore(req, res, next) {
 
 async function getAllArvores(req, res, next) {
   try {
-    const arvores = await arvoresRepository.getAllArvores();
-    res.json(arvores);
+    const page = req.query.page || 1;
+    const pageSize = 10;
+    const skip = (page - 1) * pageSize;
+    const total = await arvoresRepository.countArvores();
+    const arvores = await arvoresRepository.getAllArvores(pageSize, skip);
+    res.json({ arvores, total });
   } catch (error) {
     console.error("Erro ao buscar todas as árvores:", error);
     res.sendStatus(500); // Internal Server Error

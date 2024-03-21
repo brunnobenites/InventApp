@@ -158,7 +158,6 @@ function Inventarios() {
                       >
                         <svg
                           className="icon icon-xs"
-                          a
                           data-slot="icon"
                           fill="none"
                           strokeWidth="1.5"

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import Menu from "../../components/Menu/Menu";
 import { getAllArvores, deleteArvore } from "../../services/ArvoresService";
 import { getAllInventarios } from "../../services/InventariosService";
 import NewArvoreButton from "./NewArvoreButton";
 import NewArvoreModal from "./NewArvoreModal";
 import UpdateArvoreModal from "./UpdateArvoreModal";
+import Pagination from "../../components/Pagination/Pagination";
 
 /**
  * props:
@@ -19,7 +20,20 @@ function Arvores() {
   const [arvores, setArvores] = useState([]);
   const [inventarios, setInventarios] = useState([]); // Adicione um estado para os inventários
   const [selectedArvoreId, setSelectedArvoreId] = useState(null); // Adicione um estado para a árvore selecionada [1/2
+  const [count, setCount] = useState(0);
   const [error, setError] = useState("");
+
+  function getPage(location) {
+    const page = new URLSearchParams(location.search).get("page");
+    return page !== null && page !== undefined ? page : 1;
+  }
+
+  const location = useLocation();
+  const [page, setPage] = useState(getPage(history.location));
+
+  useEffect(() => {
+    setPage(getPage(location));
+  }, [location]);
 
   function onEditClick(id_arvore) {
     setSelectedArvoreId(id_arvore);
@@ -28,10 +42,11 @@ function Arvores() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const dataArvores = await getAllArvores();
+        const { data: dataArvores, total } = await getAllArvores(page);
         const dataInventarios = await getAllInventarios(); // Busque os inventários aqui
         setArvores(dataArvores);
         setInventarios(dataInventarios); // Defina o estado dos inventários aqui
+        setCount(total); // Atualize o valor de count aqui
       } catch (error) {
         if (error.response && error.response.status === 401) {
           history.push("/");
@@ -44,7 +59,7 @@ function Arvores() {
     };
 
     fetchData();
-  }, [history]);
+  }, [history, page]);
 
   const onDeleteClick = async (id_arvore) => {
     const confirmDelete = window.confirm(
@@ -55,8 +70,9 @@ function Arvores() {
         await deleteArvore(id_arvore);
         console.log("Árvore excluída com sucesso!");
         // Atualizar a lista de árvores após a exclusão
-        const dataArvores = await getAllArvores();
+        const { data: dataArvores, total } = await getAllArvores(page);
         setArvores(dataArvores);
+        setCount(total);
       } catch (err) {
         console.error(
           "Erro ao excluir árvore:",
@@ -69,8 +85,11 @@ function Arvores() {
   // Função para atualizar a lista de árvores
   const updateArvoresList = async () => {
     try {
-      const dataArvores = await getAllArvores();
+      const { data: dataArvores, total } = await getAllArvores(page);
       setArvores(dataArvores);
+      setCount(total);
+      // Se a nova "arvore" foi inserida, navegar para a última página
+      setPage(Math.ceil(total / 10));
     } catch (error) {
       setError("Erro ao atualizar lista de árvores.");
     }
@@ -210,53 +229,14 @@ function Arvores() {
               )}
             </tbody>
           </table>
-          <div className="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
-            <nav aria-label="Page navigation example">
-              <ul className="pagination mb-0">
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    Anterior
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    1
-                  </a>
-                </li>
-                <li className="page-item active">
-                  <a className="page-link" href="#">
-                    2
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    3
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    4
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    5
-                  </a>
-                </li>
-                <li className="page-item">
-                  <a className="page-link" href="#">
-                    Próxima
-                  </a>
-                </li>
-              </ul>
-            </nav>
-            <div className="fw-normal small mt-4 mt-lg-0">
-              Visualizando <b>5</b> de <b>25</b> entradas
-            </div>
-          </div>
+          <Pagination count={count} size={10} max={10} currentPage={page} />
         </div>
       </main>
-      <NewArvoreModal updateArvoresList={updateArvoresList} />
+      <NewArvoreModal
+        updateArvoresList={updateArvoresList}
+        setPage={setPage}
+        getAllArvores={getAllArvores}
+      />
       <UpdateArvoreModal id_arvore={selectedArvoreId} />
     </React.Fragment>
   );
