@@ -1,18 +1,44 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { insertInventario } from "../../services/InventariosService";
+import {
+  updateInventario,
+  getInventarios,
+} from "../../services/InventariosService";
 
-function NewInventarioModal({ updateInventariosList }) {
+function UpdateInventarioModal({
+  selectedInventarioId,
+  updateInventariosList,
+}) {
   const history = useHistory();
   const btnClose = useRef("");
   const [newInventario, setNewInventario] = useState("");
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (selectedInventarioId) {
+        try {
+          const data = await getInventarios(selectedInventarioId);
+          setNewInventario(data.name);
+        } catch (error) {
+          if (error.response && error.response.status === 401) {
+            history.push("/");
+          } else if (error.response) {
+            setError(error.response.data);
+          } else {
+            setError(error.message);
+          }
+        }
+      }
+    };
+    fetchData();
+  }, [history, selectedInventarioId]);
+
   async function onFormSubmit(event) {
     event.preventDefault();
     try {
       const inventario = { name: newInventario };
-      const response = await insertInventario(inventario);
+      const response = await updateInventario(selectedInventarioId, inventario);
       console.log("Resposta do servidor: ", response);
       // Fechar a modal
       btnClose.current.click();
@@ -30,7 +56,7 @@ function NewInventarioModal({ updateInventariosList }) {
   return (
     <div
       className="modal fade"
-      id="modalNewInventario"
+      id="modalUpdateInventario"
       tabIndex="-1"
       role="dialog"
       aria-labelledby="modalTitleNotify"
@@ -39,7 +65,7 @@ function NewInventarioModal({ updateInventariosList }) {
       <div className="modal-dialog modal-dialog-centered" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <p className="modal-title">Novo Inventário</p>
+            <p className="modal-title">Atualizar Inventário</p>
             <button
               ref={btnClose}
               type="button"
@@ -73,7 +99,7 @@ function NewInventarioModal({ updateInventariosList }) {
               type="button"
               onClick={onFormSubmit}
             >
-              Salvar
+              Atualizar e Salvar
             </button>
           </div>
         </div>
@@ -82,4 +108,4 @@ function NewInventarioModal({ updateInventariosList }) {
   );
 }
 
-export default NewInventarioModal;
+export default UpdateInventarioModal;

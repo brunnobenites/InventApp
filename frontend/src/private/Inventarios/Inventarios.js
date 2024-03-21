@@ -7,10 +7,12 @@ import {
 } from "../../services/InventariosService";
 import NewInventarioButton from "../Inventarios/NewInventarioButton";
 import NewInventarioModal from "./NewInventarioModal";
+import UpdateInventarioModal from "./UpdateInventarioModal";
 
 function Inventarios() {
   const history = useHistory();
   const [inventarios, setInventarios] = useState([]);
+  const [selectedInventarioId, setSelectedInventarioId] = useState(null); // Adicione um estado para a árvore selecionada [1/2
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -44,6 +46,19 @@ function Inventarios() {
         "Erro ao excluir inventário:",
         err.response ? err.response.data : err.message
       );
+    }
+  };
+
+  const onEditClick = (id_inventario) => {
+    setSelectedInventarioId(id_inventario);
+  }; // Adicione um callback para o evento de clique no botão de editar
+
+  const updateInventariosList = async () => {
+    try {
+      const dataInventarios = await getAllInventarios();
+      setInventarios(dataInventarios);
+    } catch (error) {
+      setError("Erro ao atualizar lista de inventários.");
     }
   };
 
@@ -114,8 +129,8 @@ function Inventarios() {
                         className="btn btn-secondary btn-xs ms-2"
                         tittle="Editar este Inventário"
                         data-bs-toggle="modal"
-                        data-bs-target="#modalNewInventario"
-                        //onClick={onEditClick}
+                        data-bs-target="#modalUpdateInventario"
+                        onClick={() => onEditClick(inventario.id_inventario)}
                       >
                         <svg
                           className="icon icon-xs"
@@ -219,7 +234,11 @@ function Inventarios() {
           </div>
         </div>
       </main>
-      <NewInventarioModal />
+      <NewInventarioModal updateInventariosList={updateInventariosList} />
+      <UpdateInventarioModal
+        updateInventariosList={updateInventariosList}
+        selectedInventarioId={selectedInventarioId}
+      />
     </React.Fragment>
   );
 }
