@@ -33,7 +33,7 @@ function Settings() {
         if (err.response) setError(err.response.data);
         else setError(err.message);
       });
-  }, []);
+  }, [history]);
 
   function onFormSubmit(event) {
     event.preventDefault();
@@ -138,12 +138,6 @@ function Settings() {
                 <div className="col-md-6 mb-3">
                   <div className="form-group">
                     <label htmlFor="telegramChat">Telegram Chat ID</label>
-                    <a
-                      //href={"https://t.me/" + settings.telegramBot}
-                      className="badge bg-secondary py-1 ms-1"
-                    >
-                      ?
-                    </a>
                     <input
                       className="form-control"
                       id="telegramChat"

@@ -1,9 +1,7 @@
 import React, { useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { insertInventario } from "../../services/InventariosService";
 
 function NewInventarioModal({ updateInventariosList }) {
-  const history = useHistory();
   const btnClose = useRef("");
   const [newInventario, setNewInventario] = useState("");
   const [error, setError] = useState("");

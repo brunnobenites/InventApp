@@ -8,7 +8,6 @@ import SelectInventario from "./private/Inventarios/SelectInventario";
 
 function Routes() {
   function PrivateRoute({ children, ...rest }) {
-    console.log("Props em PrivateRoute:", rest); // Adicione este console.log
     return (
       <Route
         {...rest}

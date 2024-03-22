@@ -3,9 +3,12 @@ import SelectInventario from "../Inventarios/SelectInventario";
 import { getArvore } from "../../services/ArvoresService";
 import { useHistory } from "react-router-dom";
 import { updateArvore } from "../../services/ArvoresService";
+import FormCap from "../../components/Cap/Cap";
+import FormWithCamera from "../../components/Photos/Photos";
+import FormWithLocation from "../../components/Coordinate/Coordinate";
 
 function UpdateArvoreModal({ id_arvore, id_inventario }) {
-  const history = useHistory();
+  const history = useHistory("");
   const btnClose = useRef("");
   const [newArvore, setNewArvore] = useState({});
   const [error, setError] = useState("");
@@ -21,10 +24,11 @@ function UpdateArvoreModal({ id_arvore, id_inventario }) {
   useEffect(() => {
     if (id_arvore) {
       getArvore(id_arvore).then((arvore) => {
-        setNewArvore(arvore);
+        setNewArvore((prevState) => ({ ...prevState, ...arvore }));
       });
     } else {
-      setNewArvore({
+      setNewArvore((prevState) => ({
+        ...prevState,
         id_arvore: "",
         n_tag: "",
         especie: "",
@@ -48,7 +52,7 @@ function UpdateArvoreModal({ id_arvore, id_inventario }) {
         legfoto1: "",
         legfoto2: "",
         id_inventario: id_inventario,
-      });
+      }));
     }
   }, [id_inventario, id_arvore]);
 
@@ -120,21 +124,7 @@ function UpdateArvoreModal({ id_arvore, id_inventario }) {
                   className="dropdown-divider mt-2 mb-2 col-12 p-0"
                 ></li>
                 <div className="row">
-                  <div className="col-md-3 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="n_tag">Tag:</label>
-                      <input
-                        className="form-control"
-                        id="n_tag"
-                        type="number"
-                        placeholder="00"
-                        value={newArvore.n_tag || ""}
-                        //required
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-9 mb-2">
+                  <div className="col-md-12 mb-2">
                     <div className="form-group">
                       <label htmlFor="especie">Espécie:</label>
                       <input
@@ -150,7 +140,21 @@ function UpdateArvoreModal({ id_arvore, id_inventario }) {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-md-3 mb-2">
+                  <div className="col-md-6 mb-2">
+                    <div className="form-group">
+                      <label htmlFor="n_tag">Tag:</label>
+                      <input
+                        className="form-control"
+                        id="n_tag"
+                        type="number"
+                        placeholder="00"
+                        value={newArvore.n_tag || ""}
+                        //required
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6 mb-2">
                     <div className="form-group">
                       <label htmlFor="altura">Altura (m):</label>
                       <input
@@ -164,49 +168,24 @@ function UpdateArvoreModal({ id_arvore, id_inventario }) {
                       />
                     </div>
                   </div>
-                  <div className="col-md-3 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="cap1">CAP1 (cm):</label>
-                      <input
-                        className="form-control"
-                        id="cap1"
-                        type="number"
-                        placeholder="00"
-                        value={newArvore.cap1 || ""}
-                        //required
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-3 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="cap2">CAP2 (cm):</label>
-                      <input
-                        className="form-control"
-                        id="cap2"
-                        type="number"
-                        placeholder="00"
-                        value={newArvore.cap2 || ""}
-                        //required
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-3 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="cap3">CAP3 (cm):</label>
-                      <input
-                        className="form-control"
-                        id="cap3"
-                        type="number"
-                        placeholder="00"
-                        value={newArvore.cap3 || ""}
-                        //required
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                  </div>
+                  <FormCap
+                    defaultFields={["cap1"]}
+                    handleInputChange={handleInputChange}
+                    initialValues={{
+                      cap1: newArvore.cap1,
+                      cap2: newArvore.cap2,
+                      cap3: newArvore.cap3,
+                      cap4: newArvore.cap4,
+                      cap5: newArvore.cap5,
+                      cap6: newArvore.cap6,
+                      cap7: newArvore.cap7,
+                      cap8: newArvore.cap8,
+                      cap9: newArvore.cap9,
+                      cap10: newArvore.cap10,
+                    }}
+                  />
                 </div>
+                <div className="row"></div>
                 <div className="row">
                   <div className="col-md-12 mb-2">
                     <div className="form-group">
@@ -223,36 +202,11 @@ function UpdateArvoreModal({ id_arvore, id_inventario }) {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-md-6 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="latitude">Latitude:</label>
-                      <input
-                        className="form-control"
-                        id="latitude"
-                        type="number"
-                        placeholder="ex: -23.5505"
-                        value={newArvore.latitude || ""}
-                        //required
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-6 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="longitude">Longitude:</label>
-                      <input
-                        className="form-control"
-                        id="longitude"
-                        type="number"
-                        placeholder="ex: -46.6333"
-                        value={newArvore.longitude || ""}
-                        //required
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                  </div>
-                </div>
+                <FormWithLocation
+                  handleInputChange={handleInputChange}
+                  latitude={newArvore.latitude}
+                  longitude={newArvore.longitude}
+                />
                 <div className="row">
                   <div className="col-md-12 mb-2">
                     <div className="form-group">
@@ -269,38 +223,7 @@ function UpdateArvoreModal({ id_arvore, id_inventario }) {
                     </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-md-12 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="foto1">Foto 1:</label>
-                      <input
-                        className="form-control"
-                        id="foto1"
-                        type="text"
-                        placeholder=""
-                        value={newArvore.foto1 || ""}
-                        //required
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-12 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="foto2">Foto 2:</label>
-                      <input
-                        className="form-control"
-                        id="foto2"
-                        type="text"
-                        placeholder=""
-                        value={newArvore.foto2 || ""}
-                        //required
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                  </div>
-                </div>
+                <FormWithCamera />
               </div>
             </div>
           </div>

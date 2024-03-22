@@ -23,7 +23,7 @@ function Pagination(props) {
 
     // Verifica se a página atual (props.currentPage) é igual à página que está sendo renderizada
     // Se não houver uma página especificada na URL (queryPage é nulo), considera a primeira página como a página ativa
-    const isActive = props.currentPage == page || (!queryPage && page == 1);
+    const isActive = Number(queryPage) === page || (!queryPage && page === 1);
 
     // Se isActive for verdadeiro, retorna "page-item active", caso contrário, retorna "page-item"
     return isActive ? "page-item active" : "page-item";

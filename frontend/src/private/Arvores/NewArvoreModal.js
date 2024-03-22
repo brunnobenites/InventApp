@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import SelectInventario from "../Inventarios/SelectInventario";
 import { useHistory } from "react-router-dom";
+import SelectInventario from "../Inventarios/SelectInventario";
 import { insertArvore, getAllArvores } from "../../services/ArvoresService";
 import { getAllInventarios } from "../../services/InventariosService";
 import FormWithLocation from "../../components/Coordinate/Coordinate";
@@ -13,33 +13,6 @@ function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
   const [newArvore, setNewArvore] = useState({});
   const [lastInventarioId, setLastInventarioId] = useState(null); // [1
   const [error, setError] = useState("");
-
-  const setDefaultArvore = (id_inventario) => {
-    setNewArvore({
-      n_tag: "",
-      especie: "",
-      altura: "",
-      cap1: "",
-      cap2: "",
-      cap3: "",
-      cap4: "",
-      cap5: "",
-      cap6: "",
-      cap7: "",
-      cap8: "",
-      cap9: "",
-      cap10: "",
-      endereco: "",
-      latitude: "",
-      longitude: "",
-      foto1: "",
-      foto2: "",
-      justificativa: "",
-      legfoto1: "",
-      legfoto2: "",
-      id_inventario: id_inventario,
-    });
-  };
 
   useEffect(() => {
     async function fetchLastInventarioId() {
@@ -77,7 +50,9 @@ function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
           // Chamar a função de atualizar a lista passada por prop
           updateArvoresList();
           const { total } = await getAllArvores();
-          setPage(Math.ceil(total / 10)); // Navigate to the last page
+          const newPage = Math.ceil(total / 10);
+          setPage(newPage); // Navigate to the last page
+          history.push(`/arvores?page=${newPage}`); // Navigate to the last page (URL)
           setError(""); // Limpa o erro caso haja algum
         } else {
           setError("Erro ao inserir árvore. Por favor, tente novamente.");
@@ -138,21 +113,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
                   className="dropdown-divider mt-2 mb-2 col-12 p-0"
                 ></li>
                 <div className="row">
-                  <div className="col-md-3 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="n_tag">Tag:</label>
-                      <input
-                        className="form-control"
-                        id="n_tag"
-                        type="number"
-                        placeholder="00"
-                        value={newArvore.n_tag || ""}
-                        //required
-                        onChange={onInputChange}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-md-9 mb-2">
+                  <div className="col-md-12 mb-2">
                     <div className="form-group">
                       <label htmlFor="especie">Espécie:</label>
                       <input
@@ -168,7 +129,21 @@ function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
                   </div>
                 </div>
                 <div className="row">
-                  <div className="col-md-3 mb-2">
+                  <div className="col-md-6 mb-2">
+                    <div className="form-group">
+                      <label htmlFor="n_tag">Tag:</label>
+                      <input
+                        className="form-control"
+                        id="n_tag"
+                        type="number"
+                        placeholder="00"
+                        value={newArvore.n_tag || ""}
+                        //required
+                        onChange={onInputChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6 mb-2">
                     <div className="form-group">
                       <label htmlFor="altura">Altura (m):</label>
                       <input
@@ -182,10 +157,10 @@ function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
                       />
                     </div>
                   </div>
+
+                  <FormCap defaultFields={["cap1"]} />
                 </div>
-                <dib className="row">
-                  <FormCap />
-                </dib>
+                <div className="row"></div>
                 <div className="row">
                   <div className="col-md-12 mb-2">
                     <div className="form-group">
@@ -219,38 +194,6 @@ function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
                     </div>
                   </div>
                 </div>
-                {/* <div className="row">
-                  <div className="col-md-12 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="foto1">Foto 1:</label>
-                      <input
-                        className="form-control"
-                        id="foto1"
-                        type="text"
-                        placeholder=""
-                        value={newArvore.foto1 || ""}
-                        //required
-                        onChange={onInputChange}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-12 mb-2">
-                    <div className="form-group">
-                      <label htmlFor="foto2">Foto 2:</label>
-                      <input
-                        className="form-control"
-                        id="foto2"
-                        type="text"
-                        placeholder=""
-                        value={newArvore.foto2 || ""}
-                        //required
-                        onChange={onInputChange}
-                      />
-                    </div>
-                  </div>
-                </div> */}
                 <FormWithCamera />
               </div>
             </div>

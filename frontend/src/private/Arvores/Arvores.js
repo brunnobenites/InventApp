@@ -19,7 +19,7 @@ function Arvores() {
   const history = useHistory();
   const [arvores, setArvores] = useState([]);
   const [inventarios, setInventarios] = useState([]); // Adicione um estado para os inventários
-  const [selectedArvoreId, setSelectedArvoreId] = useState(null); // Adicione um estado para a árvore selecionada [1/2
+  const [selectedArvoreId, setSelectedArvoreId] = useState(""); // Adicione um estado para a árvore selecionada [1/2
   const [count, setCount] = useState(0);
   const [error, setError] = useState("");
 
@@ -102,6 +102,7 @@ function Arvores() {
         <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
           <div className="d-block mb-4 mb-md-0">
             <h1 className="h4">Árvores</h1>
+            {error && <div className="alert alert-danger">{error}</div>}
           </div>
         </div>
         <div className="btn-toolbar mb-2 mb-md-0">
@@ -133,8 +134,8 @@ function Arvores() {
         <div>
           <div style={{ height: "10px" }}></div>
         </div>
-        <div class="card card-body border-0 shadow table-wrapper table-responsive">
-          <table class="table table-hover">
+        <div className="card card-body border-0 shadow table-wrapper table-responsive">
+          <table className="table table-hover">
             <thead>
               <tr>
                 <th className="border-gray-200">Ações</th>
@@ -170,15 +171,15 @@ function Arvores() {
                             className="icon icon-xs"
                             data-slot="icon"
                             fill="none"
-                            stroke-width="1.5"
+                            strokeWidth="1.5"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg"
                             aria-hidden="true"
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
                             ></path>
                           </svg>

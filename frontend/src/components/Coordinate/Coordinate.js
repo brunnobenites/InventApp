@@ -1,32 +1,44 @@
 import React, { useState } from "react";
 
-function FormWithLocation() {
-  const [newArvore, setNewArvore] = useState({ latitude: "", longitude: "" });
+function FormWithLocation({ handleInputChange, latitude, longitude }) {
+  const [newArvore, setNewArvore] = useState({
+    accuracy: "",
+  });
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   const getLocation = () => {
+    setButtonClicked(true);
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser");
     } else {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setNewArvore({
-            ...newArvore,
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
+          handleInputChange({
+            target: {
+              id: "latitude",
+              value: position.coords.latitude,
+            },
           });
+          handleInputChange({
+            target: {
+              id: "longitude",
+              value: position.coords.longitude,
+            },
+          });
+          setNewArvore((prevArvore) => ({
+            ...prevArvore,
+            accuracy: position.coords.accuracy,
+          }));
         },
         () => {
-          alert("Unable to retrieve your location");
+          alert("Não foi possível obter a localização. Tente novamente.");
         }
       );
     }
   };
 
   const onInputChange = (event) => {
-    setNewArvore({
-      ...newArvore,
-      [event.target.id]: event.target.value,
-    });
+    handleInputChange(event);
   };
 
   return (
@@ -40,7 +52,7 @@ function FormWithLocation() {
               id="latitude"
               type="number"
               placeholder=""
-              value={newArvore.latitude || ""}
+              value={latitude || ""}
               onChange={onInputChange}
             />
           </div>
@@ -53,7 +65,7 @@ function FormWithLocation() {
               id="longitude"
               type="number"
               placeholder=""
-              value={newArvore.longitude || ""}
+              value={longitude || ""}
               onChange={onInputChange}
             />
           </div>
@@ -63,32 +75,38 @@ function FormWithLocation() {
         <div className="col-md-6 mb-2">
           <button
             type="button"
-            className="btn btn-info dropdown-toggle"
+            className="btn btn-info dropdown-toggle mb-2 mt-1"
             onClick={getLocation}
           >
             <svg
               className="icon icon-xs me-2"
               data-slot="icon"
               fill="none"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
               ></path>
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
               ></path>
             </svg>
             Obter Coordenadas
           </button>
+          {buttonClicked && (
+            <span style={{ color: "black", fontSize: "14px" }}>
+              Precisão:{" "}
+              {newArvore.accuracy ? newArvore.accuracy.toFixed(2) : ""} m
+            </span>
+          )}
         </div>
       </div>
     </form>

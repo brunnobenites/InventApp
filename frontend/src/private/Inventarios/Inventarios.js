@@ -74,6 +74,11 @@ function Inventarios() {
     <React.Fragment>
       <Menu />
       <main className="content">
+        {error && (
+          <div className="alert alert-danger" role="alert">
+            {error}
+          </div>
+        )}
         <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
           <div className="d-block mb-4 mb-md-0">
             <h1 className="h4">Inventários</h1>
@@ -136,15 +141,15 @@ function Inventarios() {
                           className="icon icon-xs"
                           data-slot="icon"
                           fill="none"
-                          stroke-width="1.5"
+                          strokeWidth="1.5"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
                           xmlns="http://www.w3.org/2000/svg"
                           aria-hidden="true"
                         >
                           <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                             d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
                           ></path>
                         </svg>
@@ -187,50 +192,6 @@ function Inventarios() {
               )}
             </tbody>
           </table>
-          <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
-            <nav aria-label="Page navigation example">
-              <ul class="pagination mb-0">
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    Anterior
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    1
-                  </a>
-                </li>
-                <li class="page-item active">
-                  <a class="page-link" href="#">
-                    2
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    3
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    4
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    5
-                  </a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="#">
-                    Próxima
-                  </a>
-                </li>
-              </ul>
-            </nav>
-            <div class="fw-normal small mt-4 mt-lg-0">
-              Visualizando <b>5</b> de <b>25</b> entradas
-            </div>
-          </div>
         </div>
       </main>
       <NewInventarioModal updateInventariosList={updateInventariosList} />

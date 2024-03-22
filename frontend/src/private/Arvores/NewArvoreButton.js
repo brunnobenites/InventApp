@@ -9,7 +9,7 @@ function NewArvoreButton() {
       data-bs-target="#modalNewArvore"
     >
       <svg
-        class="icon icon-xs me-2"
+        className="icon icon-xs me-2"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
