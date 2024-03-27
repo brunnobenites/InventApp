@@ -8,6 +8,8 @@ const cors = require("cors");
 const helmet = require("helmet");
 const inventariosController = require("./controllers/inventariosController");
 const arvoresController = require("./controllers/arvoresController");
+const multer = require("multer");
+const upload = require("./upload");
 
 const app = express();
 
@@ -22,7 +24,6 @@ const app = express();
 app.use(cors());
 
 app.use(helmet());
-
 app.use(express.json()); //trans forma em json
 
 //req é o que vem do frontend e res é a resposta
@@ -55,7 +56,34 @@ app.get("/arvores/", arvoresController.getAllArvores);
 
 app.get("/arvores/:id_arvore", arvoresController.getArvore);
 
-app.post("/arvores", arvoresController.insertArvore);
+app.post(
+  "/arvores",
+  upload.any(),
+  (req, res, next) => {
+    console.log(req.body); // Log the request body
+    console.log(req.files); // Log the files
+
+    // Adicione esta parte para construir o URL da imagem
+    if (req.files) {
+      const foto1File = req.files.find((file) => file.fieldname === "foto1");
+      const foto2File = req.files.find((file) => file.fieldname === "foto2");
+
+      if (foto1File) {
+        req.body.foto1 = "http://localhost:3001/uploads/" + foto1File.filename;
+      }
+
+      if (foto2File) {
+        req.body.foto2 = "http://localhost:3001/uploads/" + foto2File.filename;
+      }
+    }
+
+    // Convert 'id_inventario' to a number
+    req.body.id_inventario = Number(req.body.id_inventario);
+
+    next();
+  },
+  arvoresController.insertArvore
+);
 
 app.patch("/arvores/:id_arvore", arvoresController.updateArvore);
 

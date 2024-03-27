@@ -33,26 +33,6 @@ async function getAllArvores(req, res, next) {
   }
 }
 
-async function insertArvore(req, res, next) {
-  try {
-    const { id_inventario, ...newArvore } = req.body; // Separar o id_inventario dos demais campos
-    if (!id_inventario) {
-      return res
-        .status(400)
-        .json({ error: "Campo 'id_inventario' é obrigatório." });
-    }
-
-    const arvore = await arvoresRepository.insertArvore({
-      id_inventario,
-      ...newArvore,
-    });
-    res.status(201).json(arvore); // Retornar a árvore criada com o status 201 (Created)
-  } catch (error) {
-    console.error("Erro ao inserir árvore:", error);
-    res.status(500).json({ error: "Erro interno do servidor" });
-  }
-}
-
 async function deleteArvore(req, res, next) {
   try {
     const id_arvore = req.params.id_arvore;
@@ -61,6 +41,49 @@ async function deleteArvore(req, res, next) {
   } catch (error) {
     console.error("Erro ao excluir árvore:", error);
     res.status(500).json({ error: "Erro ao excluir árvore." });
+  }
+}
+
+async function insertArvore(req, res, next) {
+  console.log("insertArvore chamada");
+  console.log("Corpo da requisição antes do processamento:", req.body); // Log the request body before processing
+  console.log("Arquivos recebidos antes do processamento:", req.files); // Log the files before processing
+
+  try {
+    let { id_inventario, ...newArvore } = req.body;
+    id_inventario = Number(id_inventario); // Converta id_inventario para um número
+    console.log("id_inventario convertido para número:", id_inventario); // Log the converted id_inventario
+
+    if (!id_inventario) {
+      return res
+        .status(400)
+        .json({ error: "Campo 'id_inventario' é obrigatório." });
+    }
+
+    if (req.files) {
+      if (req.files["foto1"]) {
+        newArvore.foto1 = req.files["foto1"][0].path;
+      }
+      if (req.files["foto2"]) {
+        newArvore.foto2 = req.files["foto2"][0].path;
+      }
+    }
+
+    console.log("Corpo da requisição após o processamento:", req.body); // Log the request body after processing
+    console.log("Arquivos recebidos após o processamento:", req.files); // Log the files after processing
+    console.log("Dados passados para arvoresRepository.insertArvore:", {
+      id_inventario,
+      ...newArvore,
+    }); // Log the data being passed to insertArvore
+
+    const arvore = await arvoresRepository.insertArvore({
+      id_inventario,
+      ...newArvore,
+    });
+    res.status(201).json(arvore);
+  } catch (error) {
+    console.error("Erro ao inserir árvore:", error);
+    res.status(500).json({ error: "Erro interno do servidor" });
   }
 }
 

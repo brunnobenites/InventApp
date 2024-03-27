@@ -16,13 +16,25 @@ export async function getAllArvores(page = 1) {
   return { data: response.data.arvores, total: response.data.total };
 }
 
-export async function insertArvore(newArvore) {
+export async function insertArvore(formData) {
   try {
-    const response = await axios.post(ARVORES_URL, newArvore);
+    console.log("insertArvore chamada");
+    console.log("Corpo da requisição antes do processamento:", formData); // Log the request body before processing
+
+    const response = await axios.post(
+      "http://localhost:3001/arvores",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
     console.log("Resposta da requisição POST:", response);
-    return response; // Retornar a resposta completa, incluindo o status
+    return response.data; // Return the response data
   } catch (error) {
-    console.log("Erro na requisição POST:", error.response); // Log do erro para depuração
+    console.error("Erro na requisição POST:", error.response); // Log the error for debugging
     throw new Error("Erro ao inserir árvore no banco de dados.");
   }
 }

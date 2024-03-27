@@ -52,7 +52,7 @@ function FormCap({
                 className="form-control"
                 id={`cap${index + 1}`}
                 type="number"
-                placeholder="00"
+                placeholder=""
                 value={cap[`cap${index + 1}`] || ""}
                 onChange={handleCapInputChange}
               />

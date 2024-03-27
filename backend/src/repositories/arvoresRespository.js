@@ -33,18 +33,6 @@ async function countArvores() {
   }
 }
 
-async function insertArvore(newArvore) {
-  try {
-    console.log("Dados da árvore a ser inserida:", newArvore);
-    const arvore = await arvoresModel.create(newArvore);
-    console.log("Árvore criada:", arvore);
-    return arvore;
-  } catch (error) {
-    console.error("Erro ao inserir árvore:", error);
-    throw new Error("Erro ao inserir árvore no banco de dados.");
-  }
-}
-
 async function deleteArvore(id_arvore) {
   try {
     const arvore = await arvoresModel.findByPk(id_arvore);
@@ -55,6 +43,18 @@ async function deleteArvore(id_arvore) {
     return { message: "Árvore excluída com sucesso." };
   } catch (error) {
     throw new Error("Erro ao excluir árvore do banco de dados.");
+  }
+}
+
+async function insertArvore(newArvore) {
+  try {
+    console.log("Dados da árvore a ser inserida:", newArvore);
+    const arvore = await arvoresModel.create(newArvore);
+    console.log("Árvore criada:", arvore);
+    return arvore;
+  } catch (error) {
+    console.error("Erro ao inserir árvore:", error);
+    throw new Error("Erro ao inserir árvore no banco de dados.");
   }
 }
 

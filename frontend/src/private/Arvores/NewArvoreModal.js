@@ -11,6 +11,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
   const history = useHistory();
   const btnClose = useRef("");
   const [newArvore, setNewArvore] = useState({});
+  const [photos, setPhotos] = useState([]);
   const [lastInventarioId, setLastInventarioId] = useState(null); // [1
   const [error, setError] = useState("");
 
@@ -32,38 +33,48 @@ function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
     fetchLastInventarioId();
   }, []);
 
-  function onFormSubmit(event) {
+  async function onFormSubmit(event) {
     event.preventDefault();
 
-    // Verificar se id_inventario está presente
-    if (!newArvore.id_inventario) {
-      setError("ID do inventário não especificado.");
+    if (!newArvore.id_inventario || isNaN(Number(newArvore.id_inventario))) {
+      setError("ID do inventário não especificado ou inválido.");
       return;
     }
 
-    // Chamar a função insertArvore apenas se o id_inventario estiver presente
-    insertArvore({ ...newArvore })
-      .then(async (response) => {
-        console.log("Resposta do servidor:", response);
-        if (response.status === 201) {
-          btnClose.current.click();
-          // Chamar a função de atualizar a lista passada por prop
-          updateArvoresList();
-          const { total } = await getAllArvores();
-          const newPage = Math.ceil(total / 10);
-          setPage(newPage); // Navigate to the last page
-          history.push(`/arvores?page=${newPage}`); // Navigate to the last page (URL)
-          setError(""); // Limpa o erro caso haja algum
-        } else {
-          setError("Erro ao inserir árvore. Por favor, tente novamente.");
+    try {
+      const formData = new FormData();
+
+      for (let key in newArvore) {
+        if (newArvore[key] !== null && newArvore[key] !== undefined) {
+          formData.append(key, newArvore[key]);
         }
-      })
-      .catch((error) => {
-        console.log("Erro na requisição:", error);
-        setError(
-          "Erro ao enviar requisição. Por favor, tente novamente mais tarde."
-        );
-      });
+      }
+      formData.set("id_inventario", Number(newArvore.id_inventario));
+
+      // Adicione as fotos ao FormData
+      formData.append("foto1", newArvore.foto1);
+      formData.append("foto2", newArvore.foto2);
+
+      // Chame a função insertArvore passando o FormData com as fotos
+      await insertArvore(formData);
+
+      // Limpe os campos do formulário e os erros após inserção bem-sucedida
+      setNewArvore({});
+      setPhotos([]); // Limpe os campos de fotos
+      setError("");
+
+      // Atualize a lista de árvores e navegue para a página correta
+      updateArvoresList();
+      const { total } = await getAllArvores();
+      const newPage = Math.ceil(total / 10);
+      setPage(newPage);
+      history.push(`/arvores?page=${newPage}`);
+      // Feche a modal após a inserção bem-sucedida
+      btnClose.current.click();
+    } catch (error) {
+      console.error("Erro na requisição POST:", error);
+      setError("Erro ao inserir árvore.");
+    }
   }
 
   function onInputChange(event) {
@@ -74,6 +85,21 @@ function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
       ...newArvore,
       [id]: parsedValue,
     });
+  }
+
+  function handleInputChange(field, value) {
+    setNewArvore({
+      ...newArvore,
+      [field]: value,
+    });
+  }
+
+  function capInputChange(event) {
+    const { id, value } = event.target;
+    setNewArvore((prevState) => ({
+      ...prevState,
+      [id]: value === "" ? null : value,
+    }));
   }
 
   return (
@@ -158,7 +184,22 @@ function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
                     </div>
                   </div>
 
-                  <FormCap defaultFields={["cap1"]} />
+                  <FormCap
+                    defaultFields={["cap1"]}
+                    handleInputChange={capInputChange}
+                    initialValues={{
+                      cap1: newArvore.cap1,
+                      cap2: newArvore.cap2,
+                      cap3: newArvore.cap3,
+                      cap4: newArvore.cap4,
+                      cap5: newArvore.cap5,
+                      cap6: newArvore.cap6,
+                      cap7: newArvore.cap7,
+                      cap8: newArvore.cap8,
+                      cap9: newArvore.cap9,
+                      cap10: newArvore.cap10,
+                    }}
+                  />
                 </div>
                 <div className="row"></div>
                 <div className="row">
@@ -177,7 +218,11 @@ function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
                     </div>
                   </div>
                 </div>
-                <FormWithLocation />
+                <FormWithLocation
+                  handleInputChange={capInputChange}
+                  latitude={newArvore.latitude}
+                  longitude={newArvore.longitude}
+                />
                 <div className="row">
                   <div className="col-md-12 mb-2">
                     <div className="form-group">
@@ -194,7 +239,7 @@ function NewArvoreModal({ id_inventario, updateArvoresList, setPage }) {
                     </div>
                   </div>
                 </div>
-                <FormWithCamera />
+                <FormWithCamera onChange={handleInputChange} />
               </div>
             </div>
           </div>

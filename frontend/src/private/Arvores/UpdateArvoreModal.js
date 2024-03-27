@@ -4,7 +4,6 @@ import { getArvore } from "../../services/ArvoresService";
 import { useHistory } from "react-router-dom";
 import { updateArvore } from "../../services/ArvoresService";
 import FormCap from "../../components/Cap/Cap";
-import FormWithCamera from "../../components/Photos/Photos";
 import FormWithLocation from "../../components/Coordinate/Coordinate";
 
 function UpdateArvoreModal({ id_arvore, id_inventario }) {
@@ -17,7 +16,7 @@ function UpdateArvoreModal({ id_arvore, id_inventario }) {
     const { id, value } = event.target;
     setNewArvore((prevState) => ({
       ...prevState,
-      [id]: value,
+      [id]: value === "" ? null : value,
     }));
   }
 
@@ -223,7 +222,6 @@ function UpdateArvoreModal({ id_arvore, id_inventario }) {
                     </div>
                   </div>
                 </div>
-                <FormWithCamera />
               </div>
             </div>
           </div>
