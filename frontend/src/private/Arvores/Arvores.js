@@ -21,6 +21,7 @@ function Arvores() {
   const [inventarios, setInventarios] = useState([]); // Adicione um estado para os inventários
   const [selectedArvoreId, setSelectedArvoreId] = useState(""); // Adicione um estado para a árvore selecionada [1/2
   const [count, setCount] = useState(0);
+  const [selectedStatus, setSelectedStatus] = useState(""); // Estado para o status selecionado
   const [error, setError] = useState("");
 
   function getPage(location) {
@@ -93,6 +94,13 @@ function Arvores() {
     } catch (error) {
       setError("Erro ao atualizar lista de árvores.");
     }
+  };
+
+  const filterArvores = () => {
+    if (!selectedStatus) {
+      return arvores;
+    }
+    return arvores.filter((arvore) => arvore.status === selectedStatus);
   };
 
   return (
@@ -219,7 +227,17 @@ function Arvores() {
                       <td>{arvore.n_tag}</td>
                       <td>{arvore.especie}</td>
                       <td>{arvore.endereco}</td>
-                      <td>STATUS</td>
+                      <td>
+                        <span
+                          className={
+                            inventario && inventario.status === "EM ANDAMENTO"
+                              ? "text-success"
+                              : "text-danger"
+                          }
+                        >
+                          {inventario && inventario.status}
+                        </span>
+                      </td>
                     </tr>
                   );
                 })

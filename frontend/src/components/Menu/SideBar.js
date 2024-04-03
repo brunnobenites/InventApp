@@ -117,7 +117,7 @@ function SideBar() {
               <span className="mt-1 ms-1 sidebar-text">Árvores</span>
             </Link>
           </li>
-          <li className={getClassName("/material")}>
+          {/* <li className={getClassName("/material")}>
             <Link to="/material" className="nav-link">
               <span className="sidebar-icon">
                 <svg
@@ -137,7 +137,7 @@ function SideBar() {
               </span>
               <span className="mt-1 ms-1 sidebar-text">Material de Apoio</span>
             </Link>
-          </li>
+          </li> */}
           <li className={getClassName("/settings")}>
             <Link to="/settings" className="nav-link">
               <span className="sidebar-icon">

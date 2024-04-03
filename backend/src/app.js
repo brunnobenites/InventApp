@@ -52,6 +52,12 @@ app.delete(
   inventariosController.deleteInventario
 );
 
+// Nova rota para buscar a quantidade de árvores por inventário
+app.get(
+  "/inventarios/:id_inventario/qtde-arvores",
+  inventariosController.getQtdeArvoresPorInventario
+);
+
 app.get("/arvores/", arvoresController.getAllArvores);
 
 app.get("/arvores/:id_arvore", arvoresController.getArvore);

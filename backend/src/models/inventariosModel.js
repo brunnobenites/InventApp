@@ -9,6 +9,7 @@ const inventariosModel = database.define("inventarios", {
     primaryKey: true,
   },
   name: Sequelize.STRING,
+  status: Sequelize.STRING,
   createdAt: Sequelize.DATE,
   updatedAt: Sequelize.DATE,
 });

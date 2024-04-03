@@ -43,10 +43,22 @@ async function updateInventario(id_inventario, updatedData) {
   }
 }
 
+async function getQtdeArvoresPorInventario(id_inventario) {
+  try {
+    const arvores = await arvoresModel.findAll({ where: { id_inventario } });
+    return { qtdeArvores: arvores.length };
+  } catch (error) {
+    throw new Error(
+      "Erro ao buscar quantidade de árvores por inventário no banco de dados."
+    );
+  }
+}
+
 module.exports = {
   getInventarios,
   getAllInventarios,
   insertInventario,
   deleteInventario,
   updateInventario,
+  getQtdeArvoresPorInventario,
 };

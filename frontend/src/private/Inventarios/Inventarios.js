@@ -4,15 +4,18 @@ import Menu from "../../components/Menu/Menu";
 import {
   deleteInventario,
   getAllInventarios,
+  getQtdeArvoresPorInventario,
 } from "../../services/InventariosService";
 import NewInventarioButton from "../Inventarios/NewInventarioButton";
 import NewInventarioModal from "./NewInventarioModal";
 import UpdateInventarioModal from "./UpdateInventarioModal";
+import Report from "../../components/Report/Report";
 
 function Inventarios() {
   const history = useHistory();
   const [inventarios, setInventarios] = useState([]);
-  const [selectedInventarioId, setSelectedInventarioId] = useState(null); // Adicione um estado para a árvore selecionada [1/2
+  const [selectedInventarioId, setSelectedInventarioId] = useState(null);
+  const [qtdeArvores, setQtdeArvores] = useState({}); // Adicione um estado para a árvore selecionada
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -31,21 +34,66 @@ function Inventarios() {
       }
     };
 
-    fetchData();
-  }, [history]);
+    fetchData(); // Chamada da função fetchData
+
+    // Dependência vazia para garantir que o useEffect seja executado apenas uma vez
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true; // Adicione esta linha
+
+    const fetchQtdeArvores = async () => {
+      const newQtdeArvores = {};
+
+      for (let inventario of inventarios) {
+        try {
+          const qtdeArvoresData = await getQtdeArvoresPorInventario(
+            inventario.id_inventario
+          );
+          newQtdeArvores[inventario.id_inventario] =
+            qtdeArvoresData.qtdeArvores;
+        } catch (error) {
+          if (error.response && error.response.status === 401) {
+            history.push("/");
+          } else if (error.response) {
+            setError(error.response.data);
+          } else {
+            setError(error.message);
+          }
+        }
+      }
+
+      if (isMounted) {
+        // Adicione esta linha
+        setQtdeArvores(newQtdeArvores);
+      }
+    };
+
+    fetchQtdeArvores();
+
+    return () => {
+      // Adicione esta função de limpeza
+      isMounted = false;
+    };
+  }, [inventarios]); // Dependência para inventarios
 
   const onDeleteClick = async (id_inventario) => {
-    try {
-      await deleteInventario(id_inventario);
-      console.log("Inventário excluído com sucesso!");
-      // Atualizar a lista de árvores após a exclusão
-      const dataInventarios = await getAllInventarios();
-      setInventarios(dataInventarios);
-    } catch (err) {
-      console.error(
-        "Erro ao excluir inventário:",
-        err.response ? err.response.data : err.message
-      );
+    const confirmDelete = window.confirm(
+      "Tem certeza que deseja excluir este inventário?"
+    );
+    if (confirmDelete) {
+      try {
+        await deleteInventario(id_inventario);
+        console.log("Inventário excluído com sucesso!");
+        // Atualizar a lista de inventários após a exclusão
+        const dataInventarios = await getAllInventarios();
+        setInventarios(dataInventarios);
+      } catch (err) {
+        console.error(
+          "Erro ao excluir inventário:",
+          err.response ? err.response.data : err.message
+        );
+      }
     }
   };
 
@@ -120,7 +168,9 @@ function Inventarios() {
                 <th class="border-gray-200">Ação</th>
                 <th class="border-gray-200">Id</th>
                 <th class="border-gray-200">Nome</th>
+                <th class="border-gray-200">Árvores Cadatradas</th>
                 <th class="border-gray-200">Data</th>
+                <th class="border-gray-200">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -178,11 +228,25 @@ function Inventarios() {
                           ></path>
                         </svg>
                       </button>
+                      <Report />
                     </td>
                     <td>{inventario.id_inventario}</td>
                     <td>{inventario.name}</td>
+                    <td>
+                      <td>{qtdeArvores[inventario.id_inventario] || 0}</td>
+                    </td>
                     <td>{formatarData(inventario.createdAt)}</td>
-                    <td>Ações</td>
+                    <td>
+                      <span
+                        className={
+                          inventario.status === "EM ANDAMENTO"
+                            ? "text-success"
+                            : "text-danger"
+                        }
+                      >
+                        {inventario.status}
+                      </span>
+                    </td>
                   </tr>
                 ))
               ) : (

@@ -12,6 +12,7 @@ function UpdateInventarioModal({
   const history = useHistory();
   const btnClose = useRef("");
   const [newInventario, setNewInventario] = useState("");
+  const [status, setStatus] = useState("EM ANDAMENTO"); // Estado para o status do inventário
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -37,7 +38,7 @@ function UpdateInventarioModal({
   async function onFormSubmit(event) {
     event.preventDefault();
     try {
-      const inventario = { name: newInventario };
+      const inventario = { name: newInventario, status }; // Incluir o status no objeto inventario
       const response = await updateInventario(selectedInventarioId, inventario);
       console.log("Resposta do servidor: ", response);
       // Fechar a modal
@@ -51,6 +52,10 @@ function UpdateInventarioModal({
 
   function onInputChange(event) {
     setNewInventario(event.target.value);
+  }
+
+  function onStatusChange(event) {
+    setStatus(event.target.value);
   }
 
   return (
@@ -75,17 +80,28 @@ function UpdateInventarioModal({
             ></button>
           </div>
           <div className="modal-body">
-            <div className="form-group">
-              <div className="col-md-12">
-                <input
-                  className="form-control"
-                  id="nome"
-                  type="nome"
-                  placeholder="Nome do Inventário"
-                  value={newInventario}
-                  onChange={onInputChange}
-                />
-              </div>
+            <div className="form-group mb-2">
+              <label htmlFor="nome">Nome do Inventário:</label>
+              <input
+                className="form-control"
+                id="nome"
+                type="text"
+                placeholder="Nome do Inventário"
+                value={newInventario}
+                onChange={onInputChange}
+              />
+            </div>
+            <div className="col-md-6 form-group">
+              <label htmlFor="status">Status do Inventário:</label>
+              <select
+                className="form-select"
+                id="status"
+                value={status}
+                onChange={onStatusChange}
+              >
+                <option value="EM ANDAMENTO">Em Andamento</option>
+                <option value="FINALIZADO">Finalizado</option>
+              </select>
             </div>
           </div>
           <div className="modal-footer">

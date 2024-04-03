@@ -45,3 +45,18 @@ export async function deleteInventario(id_inventario) {
     throw new Error("Erro ao excluir inventário do banco de dados.");
   }
 }
+
+export const getQtdeArvoresPorInventario = async (id_inventario) => {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/inventarios/${id_inventario}/qtde-arvores`
+    );
+    return response.data; // Supondo que a API retorne os dados no formato esperado
+  } catch (error) {
+    console.error(
+      "Erro ao buscar quantidade de árvores por inventário:",
+      error
+    );
+    throw error;
+  }
+};

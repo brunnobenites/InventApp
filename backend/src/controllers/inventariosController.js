@@ -1,4 +1,5 @@
 const inventariosRepository = require("../repositories/inventariosRepository");
+const Arvores = require("../models/arvoresModel");
 
 async function getInventarios(req, res, next) {
   try {
@@ -65,10 +66,29 @@ async function updateInventario(req, res, next) {
   }
 }
 
+async function getQtdeArvoresPorInventario(req, res, next) {
+  try {
+    const id_inventario = req.params.id_inventario;
+    console.log("ID do inventário:", id_inventario); // Log do ID do inventário
+    const qtdeArvores = await Arvores.count({ where: { id_inventario } });
+    console.log("Quantidade de árvores por inventário:", qtdeArvores); // Log da quantidade de árvores
+    res.json({ qtdeArvores });
+  } catch (error) {
+    console.error(
+      "Erro ao buscar quantidade de árvores por inventário:",
+      error
+    );
+    res
+      .status(500)
+      .json({ error: "Erro ao buscar quantidade de árvores por inventário" });
+  }
+}
+
 module.exports = {
   getInventarios,
   getAllInventarios,
   insertInventario,
   deleteInventario,
   updateInventario,
+  getQtdeArvoresPorInventario,
 };
