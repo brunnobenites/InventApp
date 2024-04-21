@@ -97,10 +97,18 @@ function Arvores() {
   };
 
   const filterArvores = () => {
-    if (!selectedStatus) {
-      return arvores;
+    let filteredArvores = arvores;
+
+    if (selectedStatus === "EM ANDAMENTO" || selectedStatus === "FINALIZADO") {
+      filteredArvores = arvores.filter(
+        (arvore) =>
+          inventarios.find(
+            (inventario) => inventario.id_inventario === arvore.id_inventario
+          )?.status === selectedStatus
+      );
     }
-    return arvores.filter((arvore) => arvore.status === selectedStatus);
+
+    return filteredArvores;
   };
 
   return (

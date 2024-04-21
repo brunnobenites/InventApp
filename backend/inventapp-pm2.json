@@ -1,0 +1,9 @@
+{
+    "apps": [
+        {
+            "name": "inventapp",
+            "script": "npm",
+            "args": "start"
+        }
+    ]
+}
