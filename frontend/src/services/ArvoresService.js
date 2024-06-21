@@ -21,15 +21,11 @@ export async function insertArvore(formData) {
     console.log("insertArvore chamada");
     console.log("Corpo da requisição antes do processamento:", formData); // Log the request body before processing
 
-    const response = await axios.post(
-      "http://localhost:3001/arvores",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await axios.post(ARVORES_URL, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     console.log("Resposta da requisição POST:", response);
     return response.data; // Return the response data
